@@ -26,7 +26,7 @@ Cyborg a pour objectif de :
 Des utilisateurs de Cyborgs qui s'amusent :)
 
 
-## Matériel:
+## Matériel:
 
 ### Obligatoires
 
@@ -38,4 +38,4 @@ Des utilisateurs de Cyborgs qui s'amusent :)
 - Un écran (hdmi)
 
 
-## Exemple de jeu: **Donjon et Cyborgs**
+## Exemple de jeu: **Donjon et Cyborgs**
