@@ -1,0 +1,11 @@
+@font-face {
+    font-family: cyborgFont;
+    src: url(Starjedi.ttf);
+}
+
+
+body{
+  background-color: black;
+  font-family: cyborgFont;
+  color: white;
+}
