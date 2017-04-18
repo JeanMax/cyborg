@@ -2,7 +2,7 @@
 
 # Cyborg
 
-Cyborg est une plateforme de jeux de sociétés dont les supports sont les smartphones (ou tablettes ou PC) et un point d'accès Wi-Fi / Serveur Web , léger (ex Raspberry Pi).
+Cyborg (le nom est à débattre) est une plateforme de jeux de sociétés dont les supports sont les smartphones (ou tablettes ou PC) et un point d'accès Wi-Fi / Serveur Web , léger (ex Raspberry Pi).
 
 
 ![Raspberri Pi](docs/img/imageRaspPi.png "Raspberri Pi")
@@ -41,3 +41,12 @@ Des utilisateurs de Cyborgs qui s'amusent :)
 
 
 ## Exemple de jeu: **Donjon et Cyborgs**
+
+(Le nom est à débattre, le scénario et en cours d'écriture)
+
+Le jeu se déroule dans un univers fantastique futuristique. C'est un jeu multijoueur avec un maître du jeu qui est lui aussi un joueur.
+
+On peut distiguer deux camps. L'équipe et le maitre du jeu. Ces deux camps s'oppose et l'un d'entre eux pourra gagner.
+
+C'est un mix entre Donjon et Dragons et Le livre dont vous êtes le héros.
+
