@@ -2,7 +2,7 @@
 
 # Cyborg
 
-Cyborg est une plateforme de jeux de sociétés dont le support sont les smartphones (ou tablettes ou PC) et un point d'accès Wi-Fi / Serveur Web , léger (ex Raspberry Pi).
+Cyborg est une plateforme de jeux de sociétés dont les supports sont les smartphones (ou tablettes ou PC) et un point d'accès Wi-Fi / Serveur Web , léger (ex Raspberry Pi).
 
 
 ![Raspberri Pi](docs/img/imageRaspPi.png "Raspberri Pi")
@@ -22,7 +22,7 @@ Cyborg a pour objectif de :
  - Faire disparaitre l'aspect asocial lors de l'utilsation d'un smartphone.
 
 
- Il sera possible de jouer au jeux Cyborg comme on le ferai avec un jeu de société (encore faut-il une prise electrique). Mais aussi dans des lieux publiques (Métro, commerces, salles d'attentes). Pourvu que les joueurs disposents d'un ou plusieur smartphones.
+ Il sera possible de jouer au jeux Cyborg comme on le ferai avec un jeu de société (encore faut-il une prise electrique). Mais aussi dans des lieux publiques (Métro, commerces, salles d'attentes). Pourvu que les joueurs disposent d'un ou plusieur smartphones.
 
 ![Fonctionnement](docs/img/smartphones.jpg "Fonctionnement")
 Des utilisateurs de Cyborgs qui s'amusent :)
