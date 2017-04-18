@@ -8,4 +8,4 @@ Ce portail captif doit comporter les élèments suivants:
 
 Chaque jeu à son propre serveur web sur le port de son choix (ex entre 3001 et 4000). Le lien vers le jeu doit comporter le nom du joueur.
 
-C'est à chaque "jeu" par la suite de géré ces utilisateurs, définir le début d'une partie etc...
+C'est le serveur de ce portail qui propose à un joueur de créer une partie et ensuite chaque joueur peut rejoindre ou créer sa partie. C'est ensuite ce serveur qui va créer le processus fils serveur du jeu.
