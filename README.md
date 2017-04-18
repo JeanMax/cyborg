@@ -46,11 +46,11 @@ Des utilisateurs de Cyborgs qui s'amusent :)
 
 Le jeu se déroule dans un univers fantastique futuristique. C'est un jeu multijoueur avec un maître du jeu qui est lui aussi un joueur.
 
-On peut distiguer deux camps. L'équipe et le maitre du jeu. Ces deux camps s'oppose et l'un d'entre eux pourra gagner.
+On peut distiguer deux camps. L'équipe et le maitre du jeu. Ces deux camps s'oppose et seul l'un des deux camps gagne.
 
 C'est un mix entre Donjon et Dragons et Le livre dont vous êtes le héros.
 
-Le but de l'équipe est d'arriver à finir une quête alors que le maitre du jeu doit compter l'histoire suivant une trame qui lui est proposé et faire en sorte que l'équipe n'arrive pas à finir sa quête.
+Le but de l'équipe est d'arriver à finir une quête alors que le maitre du jeu doit compter l'histoire suivant une trame qui lui est proposé et faire en sorte que l'équipe perdent (meurt) avant la fin de sa quête.
 
 L'équipe évolue dans des salles et est confrontée à différentes aventures sous différentes forme:
 - Enigme choix multiples
@@ -58,4 +58,6 @@ L'équipe évolue dans des salles et est confrontée à différentes aventures s
 - Mini jeu
 
 Le maître du jeu peu réussir à convertir des menbres de l'équipe sans que les autres joueurs ne soit au courant. Les menbres de l'équipe peuvent possédés des propriétés/objets qui sont cachés au maitre du jeu.
+
+**Il est important qu'il y est un maximum d'échange hors smartphone pour garder l'aspect social du jeu (=> Evité le smartphone zombies)**
 
