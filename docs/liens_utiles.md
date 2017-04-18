@@ -5,6 +5,7 @@
 - http://expressjs.com/
 - https://socket.io/
 
-# Idée jeu:
+# Théorie des jeux:
 
 - https://www.youtube.com/watch?v=StRqGx9ri2I
+- https://www.youtube.com/watch?v=MCg2lw4Nxno
