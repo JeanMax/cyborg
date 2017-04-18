@@ -42,6 +42,8 @@ Des utilisateurs de Cyborgs qui s'amusent :)
 
 ## Exemple de jeu: **Donjon et Cyborgs**
 
+https://docs.google.com/document/d/1ozdifkfAz6q34vfYeP0GNioHgEy3g5wAPzGFakxmAVU/edit?usp=sharing_eil&ts=58f678d2
+
 
 (Le nom est à débattre, le scénario et en cours d'écriture)
 Le jeu se déroule dans un univers fantastique futuriste. C'est un jeu multijoueur avec un maître du jeu qui est lui aussi un joueur.
