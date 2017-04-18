@@ -42,22 +42,26 @@ Des utilisateurs de Cyborgs qui s'amusent :)
 
 ## Exemple de jeu: **Donjon et Cyborgs**
 
+
 (Le nom est à débattre, le scénario et en cours d'écriture)
+Le jeu se déroule dans un univers fantastique futuriste. C'est un jeu multijoueur avec un maître du jeu qui est lui aussi un joueur.
 
-Le jeu se déroule dans un univers fantastique futuristique. C'est un jeu multijoueur avec un maître du jeu qui est lui aussi un joueur.
-
-On peut distiguer deux camps. L'équipe et le maitre du jeu. Ces deux camps s'oppose et seul l'un des deux camps gagne.
-
+On peut distinguer deux camps. L'équipe et le maître du jeu. Ces deux camps s'opposent et seul l'un des deux camps gagne.
 C'est un mix entre Donjon et Dragons et Le livre dont vous êtes le héros.
-
-Le but de l'équipe est d'arriver à finir une quête alors que le maitre du jeu doit compter l'histoire suivant une trame qui lui est proposé et faire en sorte que l'équipe perdent (meurt) avant la fin de sa quête.
+Le but de l'équipe est d'arriver à finir une quête alors que le maître du jeu doit compter l'histoire suivant une trame qui lui est proposé et faire en sorte que l'équipe perdent (meurt) avant la fin de sa quête.
 
 L'équipe évolue dans des salles et est confrontée à différentes aventures sous différentes forme:
 - Enigme choix multiples
 - Combat
 - Mini jeu
 
-Le maître du jeu peu réussir à convertir des menbres de l'équipe sans que les autres joueurs ne soit au courant. Les menbres de l'équipe peuvent possédés des propriétés/objets qui sont cachés au maitre du jeu.
+Le maître du jeu peut réussir à convertir des membres de l'équipe sans que les autres joueurs ne soit au courant. Les membres de l'équipe peuvent posséder des propriétés/objets qui sont cachés au maître du jeu.
+Il est important qu'il y est un maximum d'échange hors smartphone pour garder l'aspect social du jeu (=> Évit le smartphone zombies)
 
-**Il est important qu'il y est un maximum d'échange hors smartphone pour garder l'aspect social du jeu (=> Evité le smartphone zombies)**
+## Déroulement:
+
+Avant de jouer:
+-> Chaque joueur détermine sa classe selon une série de questions.
+(Ex pas de compassion = Cyborg)
+
 
