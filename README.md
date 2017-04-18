@@ -50,3 +50,12 @@ On peut distiguer deux camps. L'équipe et le maitre du jeu. Ces deux camps s'op
 
 C'est un mix entre Donjon et Dragons et Le livre dont vous êtes le héros.
 
+Le but de l'équipe est d'arriver à finir une quête alors que le maitre du jeu doit compter l'histoire suivant une trame qui lui est proposé et faire en sorte que l'équipe n'arrive pas à finir sa quête.
+
+L'équipe évolue dans des salles et est confrontée à différentes aventures sous différentes forme:
+- Enigme choix multiples
+- Combat
+- Mini jeu
+
+Le maître du jeu peu réussir à convertir des menbres de l'équipe sans que les autres joueurs ne soit au courant. Les menbres de l'équipe peuvent possédés des propriétés/objets qui sont cachés au maitre du jeu.
+
