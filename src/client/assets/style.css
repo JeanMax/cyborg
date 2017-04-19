@@ -1,11 +1,38 @@
-@font-face {
-    font-family: cyborgFont;
-    src: url(Starjedi.ttf);
+html{
+  height: 80%;
 }
-
 
 body{
   background-color: black;
-  font-family: cyborgFont;
   color: white;
+  text-align: center;
+  font-size: 250%;
+  height: 100%;
 }
+
+div.main{
+  position: relative;;               /* 2 */
+  top: 20%;                         /* 3 */
+}
+
+input[type="text"] {
+  font-size: 100%;
+  text-align: center;
+  color: white;
+  padding: 10px;
+  background-color: black;
+  border: none;
+  border-bottom: solid 2px white;
+  transition: border 0.3s;
+}
+
+button{
+  background-color: black;
+  color: white;
+  font-size: 200%;
+  cursor: pointer;
+}
+/*input[type="text"]:focus,
+input[type="text"].focus {
+  border-bottom: solid 2px white;
+}*/
