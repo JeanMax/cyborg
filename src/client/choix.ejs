@@ -10,16 +10,17 @@
     <div class="main">
         <h1>Choisis un jeu <%= playerName %></h1>
         <ul>
-          <li><a href="newgame.html">Donjon et Cyborgs</a></li>
+          <li>
+            <form class="" action="chooseGame" method="post">
+              <input type="hidden" name="cyborgPlayerGame" value="djnCyb">
+              <input type="submit" value="Donjon et Cyborgs">
+            </form>
+          </li>
         </ul>
     </div>
   </body>
   <script type="text/javascript">
-    var socket = io('http://localhost:8080');
-    socket.connect(function () {
-      setCookie("cyborg", "test");
-    })
-
+    var socket = io();
   </script>
 
 </html>
