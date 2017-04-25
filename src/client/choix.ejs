@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/css/style.css" media="screen" title="no title" charset="utf-8">
+    <script src="/static/js/socket.io.js" charset="utf-8"></script>
+    <title>Choix jeu</title>
+  </head>
+  <body>
+    <div class="main">
+        <h1>Choisis un jeu <%= playerName %></h1>
+        <ul>
+          <li>
+            <form class="" action="chooseGame" method="post">
+              <input type="hidden" name="cyborgPlayerGame" value="djnCyb">
+              <input type="submit" value="Donjon et Cyborgs">
+            </form>
+          </li>
+        </ul>
+    </div>
+  </body>
+  <script type="text/javascript">
+    var socket = io();
+  </script>
+
+</html>
