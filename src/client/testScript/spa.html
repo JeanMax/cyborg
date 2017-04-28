@@ -3,113 +3,22 @@
   <head>
     <meta charset="utf-8">
     <title>SPA chap 1</title>
-    <style media="screen">
-      body{
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background-color: #777;
-      }
-      #spa{
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        bottom: 8px;
-        right: 8px;
-        border-radius: 8px 8px 0px 8px;
-        background-color: #fff;
-      }
-      .spa-slider {
-        position : absolute;
-        bottom: 0;
-        right: 2px;
-        width: 300px;
-        height: 16px;
-        cursor: pointer;
-        border-radius : 8px 0 0 0;
-        background-color : #f00;
-      }
-    </style>
-    <script   src="http://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="css/spa.css" type="text/css"/>
+    <link rel="stylesheet" href="css/spa.shell.css" type="text/css"/>
+
+    <!-- Librairies externes javascript -->
+    <!-- doc @ http://api.jquery.com/ -->
+    <script src="js/lib/jquery-3.2.1.js"></script>
+    <!-- doc @ https://github.com/visionmedia/page.js -->
+    <script src="js/lib/page.js"></script>
+
+    <!-- notre javascript -->
+    <script src="js/spa.js"></script>
+    <script src="js/spa.shell.js"></script>
 
     <script type="text/javascript">
-    // Module /spa/
-    // Fournit un chat slider
-
-    var spa = (function ( $ ) {
-      // Portée du module
-      var
-        // Definition des constantes
-        configMap = {
-          extended_height : 434,
-          extended_title : 'Cliquez pour retracter',
-          retracted_height : 16,
-          retracted_title : 'Cliquer pour etendre',
-          template_html : '<div class="spa-slider"><\/div>'
-        },
-
-        // Declaration des autres modules à portée
-        $chatSlider,
-        toggleSlider, onClickSlider, initModule;
-
-        // DOM method /toggleSlider/
-        // Change la hauteur du slider
-        //
-
-        toggleSlider = function () {
-          var
-            slider_height = $chatSlider.height();
-
-          // Etendre le slider si il est pleinement retracté
-          if(slider_height === configMap.retracted_height) {
-            $chatSlider
-              .animate({height : configMap.extended_height})
-              .attr( 'title', configMap.extended_title);
-            return true;
-          }
-
-          // Retracté le slider si il est pleinement étendue
-          else if (slider_height === configMap.extended_height) {
-            $chatSlider
-              .animate({height : configMap.retracted_height})
-              .attr( 'title', configMap.retracted_title);
-            return true;
-          }
-
-          //Ne pas faire d'action si le slider est en transition
-          return false;
-        }
-
-        // Gestionnaire d'evenemnt /onClickSlider/
-        // Recoit un evenment click et appels toggleSlider
-        //
-        onClickSlider = function ( event ) {
-          toggleSlider();
-          return false;
-        }
-
-        // Méthode publique /initModule/
-        // Configurer état initial et fournire les fonctionnalités
-        //
-        initModule = function ( $container ) {
-
-          // render HTML
-          $container.html(configMap.template_html);
-
-          $chatSlider = $container.find('.spa-slider');
-          // initialize slider height and title
-          // bind the user click event to the event handler
-          $chatSlider
-            .attr( 'title' , configMap.retracted_title )
-            .click ( onClickSlider );
-
-          return true;
-        };
-
-        return {initModule : initModule };
-
-    }( jQuery ));
-
     // Lancer SPA une fois que le DOM est pret
     jQuery(document).ready(
       function () { spa.initModule ( jQuery('#spa') ); }

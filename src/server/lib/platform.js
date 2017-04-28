@@ -1,6 +1,6 @@
 module.exports = Platform;
 
-var Joueur = require('./joueur.js');
+var JoueurFactory = require('./joueur.js');
 
 function Platform() {
 
@@ -12,12 +12,13 @@ function Platform() {
   }
 
   Platform.ajouterJoueur = function (nom) {
-    var joueur = undefined;
+    var joueur ;
 
     if(!Platform.joueurExiste(nom) && nom != ""){
-      joueur = Joueur(nom);
+      joueur = JoueurFactory(nom);
       listJoueurs[nom] = joueur;
     }
+    
     return joueur;
   }
 
