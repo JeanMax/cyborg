@@ -18,7 +18,7 @@ function Platform() {
       joueur = JoueurFactory(nom);
       listJoueurs[nom] = joueur;
     }
-    
+
     return joueur;
   }
 
@@ -26,6 +26,18 @@ function Platform() {
     var joueur = listJoueurs[nom];
     return joueur;
   }
+
+  //TODO
+  Platform.jeuxEnAttentes = function () {
+    var listJeuxEnAttentes = [];
+    return listJeuxEnAttentes;
+  };
+
+  //TODO
+  Platform.jeuxEnCours = function () {
+    var listJeuxEnCours = [];
+    return listJeuxEnCours;
+  };
 
   return Platform;
 

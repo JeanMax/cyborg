@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Mon style -->
+    <link rel="stylesheet" href="/static/css/style.css" media="screen" title="no title" charset="utf-8">
+
+    <!-- Dépendances js -->
+    <script src="/static/js/socket.io.js" charset="utf-8"></script>
+    <script src="/static/js/jquery-3.2.1.js" charset="utf-8"></script>
+
+    <title>Cyborg - Platform</title>
+
+  </head>
+
+  <body>
+
+    <section id="annonce"></section>
+    <section id="content"></section>
+
+    <script id="enter-name" type="text/x-template">
+      <h1>Bienvenue sur Cyborg</h1>
+      <input type="text" id="playerNameInput" class="form-control input-lg" placeholder="Entrez votre nom">
+      <br>
+      <br>
+      <button id="changeName">OK</button>
+    </script>
+
+    <script id="choose-game" type="text/x-template">
+      <h1>Choisis un jeu <span id="playerName"></span> : </h1>
+    </script>
+
+
+    <script id="not-found" type="text/x-template">
+      <h2>Not Found</h2>
+      <p>Sorry! I cannot find that page.</p>
+    </script>
+
+
+  </body>
+
+  <script type="text/javascript">
+    player = {};
+    var socket = io();
+
+    /**
+    * Gestion des vues
+    *
+    */
+    function render (idName) {
+      jQuery('#content').html(jQuery(idName).html());
+    }
+
+    //Affiche page de demande de nom
+    function showNamePage() {
+      render('#enter-name');
+      jQuery('#changeName').click(function () {
+        //Get player name
+        var playerName = jQuery('#playerNameInput').val();
+        //Save locally
+        player.name = playerName.toString();
+        //Send name to server
+        socket.emit('presentation', playerName);
+        //Show next page
+        showGamePage();
+      });
+    }
+
+    function showGamePage() {
+      render('#choose-game');
+      $('#playerName').html(player.name);
+    }
+
+
+    /**
+    * Gestion du temps réel
+    *
+    */
+    socket.on('annonce', function (val) {
+      $('#annonce').html(val);
+    });
+
+    $( document ).ready( function () {
+      showNamePage();
+    });
+
+    // render('not-found');
+
+  </script>
+
+</html>
