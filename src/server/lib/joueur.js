@@ -1,6 +1,6 @@
-module.exports = Joueur;
+module.exports = JoueurFactory;
 
-function Joueur(nom) {
+function JoueurFactory(nom) {
 
   var Joueur = {};
   var name = nom || "PasDeNom";
