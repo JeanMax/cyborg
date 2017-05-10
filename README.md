@@ -1,4 +1,4 @@
-<meta charset="utf-8" /> 
+<meta charset="utf-8" />
 
 # Cyborg
 
@@ -60,10 +60,9 @@ L'équipe évolue dans des salles et est confrontée à différentes aventures s
 Le maître du jeu peut réussir à convertir des membres de l'équipe sans que les autres joueurs ne soit au courant. Les membres de l'équipe peuvent posséder des propriétés/objets qui sont cachés au maître du jeu.
 Il est important qu'il y est un maximum d'échange hors smartphone pour garder l'aspect social du jeu (=> Évit le smartphone zombies)
 
-## Déroulement:
+
+## Déroulement:
 
 Avant de jouer:
 -> Chaque joueur détermine sa classe selon une série de questions.
 (Ex pas de compassion = Cyborg)
-
-

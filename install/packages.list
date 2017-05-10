@@ -1,0 +1,12 @@
+base-devel
+bc
+create_ap
+diffutils
+git
+mlocate
+rsync
+unzip
+wget
+zip
+zsh
+zsh-completions

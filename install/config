@@ -1,0 +1,35 @@
+## install-pi.sh config file
+
+# hardcoded values in install-pi.sh / customize-pi.sh will be used
+# for omited variables
+
+
+# version of your raspberry pi ("1" or something else, cf wiki)
+PI_VERSION=3.14
+
+# where does your sd card show up (hint: lsblk)
+PI_DEVICE=/dev/mmcblk0
+
+
+# username to use on the raspberry
+NEW_USER=pi
+
+# hostname to use on the raspberry
+NEW_HOSTNAME=cyborgberry
+
+
+# wifi access point (the one we'll create) SSID (name)
+AP_SSID=Zboub
+
+# wifi access point (the one we'll create) password
+AP_PASSWORD=zboub974
+
+
+# where to write install logs
+#LOG_DIR=/tmp
+
+# where to download archives
+#DOWNLOAD_DIR=/tmp
+
+# where to mount the raspberry file system
+#MOUNT_DIR=/mnt
