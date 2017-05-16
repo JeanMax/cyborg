@@ -105,7 +105,8 @@ Description=Create AP at startup
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/create_ap wlan0 wlan0 $AP_SSID $AP_PASSWORD
+ExecStart=/usr/bin/create_ap -n --redirect-to-localhost wlan0 $AP_SSID $AP_PASSWORD
+#ExecStart=/usr/bin/create_ap wlan0 wlan0 $AP_SSID $AP_PASSWORD
 
 [Install]
 WantedBy=multi-user.target
