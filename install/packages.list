@@ -5,7 +5,7 @@ diffutils
 docker
 git
 mlocate
-nginx
+nginx-mainline
 rsync
 unzip
 wget
