@@ -19,7 +19,7 @@ NEW_HOSTNAME=cyborgberry
 AP_SSID=Zboub
 AP_PASSWORD=zboub974
 
-source $HERE/config
+source "$HERE/config"
 PI="$MOUNT_DIR/pi_root"
 
 CLR_BLACK="\033[30;01m"
@@ -50,24 +50,12 @@ function umount_filesystem() {
 
 
 function create_filesystem() {
-	dd if=/dev/zero of=$PI_DEVICE bs=1M count=32 iflag=fullblock
-	# hahah sorry
-	fdisk $PI_DEVICE <<EOF
-o
-p
-n
-p
-1
-
-+100M
-t
-c
-n
-p
-2
-
-
-w
+	dd if=/dev/zero of=$PI_DEVICE bs=512 count=63
+	#TODO: do we need to erase the partitions if the next command fails?
+	sfdisk --delete $PI_DEVICE || true # --delete doesn't exist on debian...
+	sfdisk $PI_DEVICE <<EOF
+start=2048, size=204800, type=c
+start=206848, type=83
 EOF
 	mkfs.vfat "$PI_DEVICE"p1
 	mkfs.ext4 "$PI_DEVICE"p2
@@ -88,8 +76,8 @@ function download_and_extract() {
 
 	mkdir -p $DOWNLOAD_DIR
 	test -e $DOWNLOAD_DIR/$archive || wget $archive_url/$archive -O $DOWNLOAD_DIR/$archive
-	bsdtar -xpf $DOWNLOAD_DIR/$archive -C $MOUNT_DIR/pi_root
-	rm -rf $DOWNLOAD_DIR
+	#TODO: the next command throw weird errors on debian, but works... it would be nice to catch if it actually fails
+	bsdtar -xpf $DOWNLOAD_DIR/$archive -C $MOUNT_DIR/pi_root || true
 	sync
 
 	mv $MOUNT_DIR/pi_root/boot/* $MOUNT_DIR/pi_boot
@@ -125,6 +113,7 @@ function customize() {
 		#TODO: hook the script in systemd with netword dep?
 	fi
 
+	rm -rf $DOWNLOAD_DIR
 	umount_filesystem
 }
 

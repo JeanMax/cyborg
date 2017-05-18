@@ -2,6 +2,9 @@
 source ../config
 
 if [ "$NEW_USER" == "mc" ]; then
+	sed -i 's|\(ExecStart=/usr/bin/create_ap \).*wlan0|\1wlan0 wlan0|' \
+		/etc/systemd/system/create_ap.service
+
 	pacman -S --needed $(< mc-extra-packages.list) --noconfirm
 	pacman -Rns man-db man-pages --noconfirm
 	rm -rf /usr/lib/python3.6/test /usr/share/{doc,info,man}/*

@@ -60,6 +60,9 @@ function update_and_install_packages() {
 	pacman-key --populate archlinux
 	pacman -Syu --noconfirm
 	pacman -S --needed $(< "$HERE/packages.list") --noconfirm
+
+	systemctl enable docker.service #TODO: move
+	systemctl enable nginx.service #TODO: move
 }
 
 function create_new_user() {
@@ -94,7 +97,6 @@ function install_yaourt() {
 		cd
 		rm -rf /tmp/$package
 	done
-	rm -rf $DOWNLOAD_DIR
 	unset package_url
 }
 
@@ -131,6 +133,9 @@ function custom_hooks() {
 }
 
 function clean() {
+	rm -rf $DOWNLOAD_DIR
+	mv /root/cyborg /home/$NEW_USER/cyborg
+	chown -R $NEW_USER:users /home/$NEW_USER/cyborg
 	orphans=$(pacman -Qdtq || true)
 	test $orphans && pacman -Rns $orphans --noconfirm
 	pacman -Scc --noconfirm
