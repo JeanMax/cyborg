@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- Mon style -->
+    <link rel="stylesheet" href="static/css/platform.css" media="screen" title="no title" charset="utf-8">
+
+    <script src="static/js/jquery-3.2.1.js" charset="utf-8"></script>
+
+    <title></title>
+  </head>
+  <body>
+    <h1>Bienvenue sur Cyborg</h1>
+    <input type="text" id="playerNameInput" class="form-control input-lg" placeholder="Entrez votre nom">
+    <br>
+    <br>
+    <a id="changeName" href="chooseGame" target="_self"><img src="/static/img/ok.png" alt="" /></a>
+  </body>
+  <script type="text/javascript">
+    // On accede à l'objet player en cours grace à : window.parent.player
+    var player = window.parent.player;
+
+    jQuery('#changeName').click(function () {
+      //Get player name
+      var playerName = jQuery('#playerNameInput').val();
+      //Save locally
+      player.name = playerName.toString();
+      //Send name to server
+      player.socket.emit('presentation', playerName);
+
+    });
+
+  </script>
+</html>

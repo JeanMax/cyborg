@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="static/css/platform.css" media="screen" title="no title" charset="utf-8">
+
+    <script src="static/js/jquery-3.2.1.js" charset="utf-8"></script>
+
+    <title></title>
+  </head>
+  <body>
+    <h1>Choisis un jeu <span id="playerName"></span> : </h1>
+  </body>
+  <script type="text/javascript">
+    // On accede à l'objet player en cours grace à : window.parent.player
+    var player = window.parent.player;
+
+    jQuery('#playerName').html(player.name);
+
+  </script>
+</html>

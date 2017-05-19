@@ -11,7 +11,7 @@ var platform = require('./lib/platform.js')();
 app.set('views', __dirname+'/client');
 // app.set('view engine', 'ejs');
 
-app.use('/static',express.static('client/assets/'));
+app.use('/static',express.static('client/static/'));
 
 app.use(cookieSession({
   name: 'session',
@@ -32,8 +32,16 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 // });
 
 
-app.use('/',function (req,res,next) {
-  res.sendFile(__dirname+'/client/index.html');
+app.get('/',function (req,res,next) {
+  res.sendFile(__dirname+'/client/base.html');
+});
+
+app.get('/welcome',function (req,res,next) {
+  res.sendFile(__dirname+'/client/welcome.html');
+});
+
+app.get('/chooseGame',function (req,res,next) {
+  res.sendFile(__dirname+'/client/chooseGame.html');
 });
 
 // app.use('/*',function (req,res,next) {
@@ -108,6 +116,7 @@ io.on('connection',function (socketClient) {
   console.log("Un nouveau joueur s'est connecté :)");
 
   socketClient.on('presentation', function (nom) {
+    console.log("salut "+nom)
     socketClient.broadcast.emit('annonce', nom + " est arrivé :)");
   });
 

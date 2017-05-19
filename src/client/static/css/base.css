@@ -1,0 +1,52 @@
+body{
+  background-color: #40b55b;
+  height: 100vh;
+}
+
+
+/* Main content */
+#header {
+    height: 12%;
+}
+
+
+/* Main content */
+#main {
+  height: 88%;
+}
+
+.raw{
+  height: 100%;
+}
+img{
+  height: 100%;
+}
+#numberOfPlayer{
+  float:right;
+  padding:15px;
+  font-size: 3em;
+}
+iframe{
+  border: none;
+  width: 100%;
+  height: 99%;
+  /*height:90vh;*/
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+}
+
+li {
+    float: left;
+    height: 100%;
+}
+
+/*input[type="text"]:focus,
+input[type="text"].focus {
+  border-bottom: solid 2px white;
+}*/
