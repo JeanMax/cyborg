@@ -12,8 +12,22 @@ body{
 
 /* Main content */
 #main {
-  height: 88%;
+  height: 83%;
 }
+
+/* Main content */
+footer {
+  height: 5%;
+  text-align: center;
+  font-size: xx-large;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+#annonce{
+  
+}
+
 
 .raw{
   height: 100%;

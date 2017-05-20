@@ -113,14 +113,21 @@ server.listen(80);
 //
 io.on('connection',function (socketClient) {
 
-  console.log("Un nouveau joueur s'est connecté :)");
+  //console.log("Un nouveau joueur s'est connecté :)");
 
-  socketClient.on('presentation', function (nom) {
-    console.log("salut "+nom)
+  socketClient.on('newName', function (nom) {
     socketClient.broadcast.emit('annonce', nom + " est arrivé :)");
+    io.emit("numberOfPlayer",io.engine.clientsCount)
   });
 
+  socketClient.on('changeName', function (nameObj) {
+    socketClient.broadcast.emit('annonce',nameObj.old + " a changé son nom en "+ nameObj.new);
+    io.emit("numberOfPlayer",io.engine.clientsCount)
+  });
+
+
   socketClient.on('disconnect', function () {
-    console.log("Un joueur s'est déconnecté :(");
+    socketClient.broadcast.emit("Un joueur s'est déconnecté :s");
+    io.emit("numberOfPlayer",io.engine.clientsCount)
   });
 });
