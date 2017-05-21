@@ -46,6 +46,17 @@ app.get('/chooseGame',function (req,res,next) {
   res.render('chooseGame',{games:games});
 });
 
+app.get('/newGame',function (req,res,next) {
+  // TODO Refaire :)
+  var idGame = req.query.name.toString().trim();
+  var picked = AllGames.games.find(function (game) {
+    return game.id == idGame;
+  });
+  var gameName = picked.name;
+  
+  res.render("waitforplayer",{title:gameName})
+});
+
 // app.use('/*',function (req,res,next) {
 //   res.sendFile(__dirname+'/client/'+'index.html');
 // });

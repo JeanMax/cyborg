@@ -1,10 +1,12 @@
 {
   "games":[
     {
-      "name":"Mains blanches mains noires"
+      "name":"Mains blanches mains noires",
+      "id":"mbmn"
     },
     {
-      "name":"Morpion"
+      "name":"Morpion",
+      "id":"morp"
     }
   ]
 }

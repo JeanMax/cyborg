@@ -13,7 +13,8 @@
 
     <% for(var i=0; i<games.length; i++) {%>
         <p>
-          <a href="/" onclick="javascript:event.target.port=3001">
+          <!-- <a href="/" onclick="javascript:event.target.port=3001"> -->
+          <a href="newgame?name= <%-games[i].id-%>">
             <%= games[i].name %>
           </a>
         </p>

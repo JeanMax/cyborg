@@ -1,5 +1,5 @@
 body{
-  background-color: #f1fff4;
+  background-color: #dbf5e1;
   color: black;
   text-align: center;
   font-family: monospace;
@@ -15,7 +15,7 @@ div.main{
   font-family: monospace;
   font-weight: bold;
   color: black;
-  background-color: #f1fff4;
+  background-color: #dbf5e1;
   border: none;
   border-bottom: solid 4px black;
 }
