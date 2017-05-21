@@ -6,26 +6,21 @@ var cookieSession = require('cookie-session');
 var cookielib = require('cookie');
 var bodyParser = require('body-parser');
 var platform = require('./lib/platform.js')();
+var AllGames = require('./games.json');
 
 
-app.set('views', __dirname+'/client');
+app.set('views', __dirname+'/client/views');
 // app.set('view engine', 'ejs');
 
 app.use('/static',express.static('client/static/'));
 
-app.use(cookieSession({
-  name: 'session',
-  keys: ['randomSecretKey'],
-
-  // Cookie Options
-  maxAge:  30 * 60 * 1000 // 30 min
-}));
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 }));
 
+app.set('view engine', 'ejs');
 
 // app.use('/',function (req,res,next) {
 //   res.sendFile(__dirname+'/client/'+'index.html');
@@ -40,8 +35,15 @@ app.get('/welcome',function (req,res,next) {
   res.sendFile(__dirname+'/client/welcome.html');
 });
 
+// app.get('/chooseGame',function (req,res,next) {
+//   console.log(games);
+//   res.sendFile(__dirname+'/client/chooseGame.html');
+// });
+
 app.get('/chooseGame',function (req,res,next) {
-  res.sendFile(__dirname+'/client/chooseGame.html');
+
+  var games = AllGames.games;
+  res.render('chooseGame',{games:games});
 });
 
 // app.use('/*',function (req,res,next) {

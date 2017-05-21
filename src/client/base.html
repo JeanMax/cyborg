@@ -7,10 +7,17 @@
   <head>
     <meta charset="utf-8">
 
-    <!-- Base d'adresse par défaut --->
-    <!-- <base href="/static/"/> -->
 
     <link rel="stylesheet" href="static/css/normalize.css" media="screen" title="no title" charset="utf-8">
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD" crossorigin="anonymous">
+
+    <!-- Recommendation purecss -->
+    <!-- The viewport meta element lets you control the the width and scale of the viewport on mobile browsers. Since you're building a responsive website, you want the width to be equal to the device's native width. Add this into your page's <head>.--->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <base href="/static/"/> -->
+
     <!-- Mon style -->
     <link rel="stylesheet" href="static/css/base.css" media="screen" title="no title" charset="utf-8">
 
@@ -23,28 +30,56 @@
   </head>
   <body>
     <header id=header>
-      <ul>
-        <li> <a href="#home"><img src="static/img/gears.svg"   alt="settings" /></a></li>
-        <li> <a href="#news"><img src="static/img/speaker.svg"  alt="sound" /></a></li>
+
+      <div class="pure-g">
+          <!-- <div class="pure-u-1-8"><a href="#home"><img class=".pure-img" src="static/img/gears.svg"   alt="settings" /></a></div> -->
+
+          <div class="pure-u-1-8">
+            <!-- <img class=".pure-img" src="static/img/speaker.svg"  alt="sound" /> -->
+          </div>
+          <div class="pure-u-1-8"></div>
+          <div class="pure-u-3-8"></div>
+          <div class="pure-u-1-8"></div>
+          <div class="pure-u-1-8"><img class=".pure-img" src="static/img/cyborg-face.svg" alt="number of player" /></div>
+          <div id="numberOfPlayerZone" class="pure-u-1-8"><p  id="numberOfPlayer">
+
+          </p></div>
+      </div>
+      <!-- <ul>
+        <li> </li>
+        <li> </li>
         <li id="numberOfPlayer"></li>
         <li style="float:right">
-          <img src="static/img/cyborg-face.svg" alt="number of player" />
+
         </li>
 
-      </ul>
+      </ul> -->
 
       <!-- <a href="#home"><img src="static/img/gears.svg"   alt="settings" /></a> -->
 
 
     </header>
-    <section id="main">
-      <iframe id="mainFrame" sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation" src="welcome" seamless="">
-        <p>Sorry, your browser does not support iframes. You can't use Cyborg for the moment :s Pieg.</p>
-      </iframe>
-    </section>
-    <footer id="annonce">
-      Bienvenue sur Cyborg !
+
+    <div id="main" class="pure-g">
+        <div class="pure-u-1-1 main">
+            <iframe id="mainFrame" class="main" sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation" src="welcome" seamless="">
+              <p>Sorry, your browser does not support iframes. You can't use Cyborg for the moment :s Pieg.</p>
+            </iframe>
+        </div>
+    </div>
+
+    <footer>
+      <div class="pure-g">
+          <div class="pure-u-1-1">
+            <footer id="annonce">
+            </footer>
+          </div>
+      </div>
     </footer>
+
+
+
+
 
   </body>
   <script type="text/javascript">
@@ -53,7 +88,9 @@
 
   //document.getElementById("mainFrame").src = "page"
 
-
+  function nameChanged(playerName) {
+    jQuery('#annonce').html("Bienvenue "+playerName+"!");
+  }
   /**
   * Gestion du temps réel
   *
@@ -66,7 +103,9 @@
     $('#numberOfPlayer').html(val);
   });
 
-
+  // player.watch('name',function (id, oldval, newval) {
+  //     jQuery('#annonce').html("Bienvenue "+newval+"!");
+  // });
 
   </script>
 </html>

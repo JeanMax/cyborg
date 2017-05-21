@@ -10,19 +10,30 @@
     <title></title>
   </head>
   <body>
-    <div style="padding-top:3em">
-        <input type="text" id="playerNameInput" class="form-control input-lg" placeholder="Entrez votre nom">
-    </div>
-    <div style="padding-top:2em">
+    <form id="formName" action="chooseGame" method="get" target="_self">
+      <br>
+      <br>
+      <br>
+      <input type="text" id="playerNameInput" class="form-control input-lg" placeholder="Entrez votre nom">
+      <br>
+      <br>
+      <br>
+      <br>
+      <button type="submit"  id="validFormName">
+        <img src="/static/img/ok.png" alt="Valid form">
+      </button>
+    </form>
+
+    <!-- <div style="padding-top:2em">
           <a id="changeName" href="chooseGame" target="_self"><img src="/static/img/ok.png" alt="" /></a>
-    </div>
+    </div> -->
 
   </body>
   <script type="text/javascript">
     // On accede à l'objet player en cours grace à : window.parent.player
     var player = window.parent.player;
 
-    jQuery('#changeName').click(function () {
+    jQuery('#formName').submit(function () {
       //Get player name
       var playerName = jQuery('#playerNameInput').val();
 
@@ -30,7 +41,6 @@
       if(!player.name){
         player.socket.emit('newName', playerName);
       }else{
-        console.log(player.name,playerName);
         var oldName = player.name;
         player.socket.emit('changeName', {old:oldName , new:playerName });
       }
@@ -38,6 +48,7 @@
       //Save locally
       player.name = playerName.toString();
 
+      window.parent.nameChanged(player.name );
 
     });
 

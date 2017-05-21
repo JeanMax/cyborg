@@ -1,25 +1,28 @@
 body{
-  background-color: #40b55b;
+  background-color: #f1fff4;
   color: black;
   text-align: center;
-  font-size: 250%;
-  height: 100%;
+  font-family: monospace;
 }
 
 div.main{
-  position: relative;;               /* 2 */
-  top: 20%;                         /* 3 */
+  position: relative;;
+  top: 20%;
 }
 
-input[type="text"] {
-  font-size: 100%;
+#playerNameInput {
   text-align: center;
-  color: white;
-  padding: 10px;
-  background-color: black;
+  font-family: monospace;
+  font-weight: bold;
+  color: black;
+  background-color: #f1fff4;
   border: none;
-  border-bottom: solid 2px white;
-  transition: border 0.3s;
+  border-bottom: solid 4px black;
+}
+
+#validFormName{
+  background-color: transparent;
+  border: none;
 }
 
 button{
@@ -27,12 +30,4 @@ button{
   color: white;
   font-size: 200%;
   cursor: pointer;
-}
-
-a{
-  color: white;
-}
-
-li{
-  list-style-type: none;
 }

@@ -9,13 +9,21 @@
     <title></title>
   </head>
   <body>
-    <h1 style="font-size: 150%;">Choisis un jeu <span id="playerName"></span> : </h1>
+    <h1>Choisis un jeu:</h1>
+
+    <% for(var i=0; i<games.length; i++) {%>
+        <p>
+          <a href="/" onclick="javascript:event.target.port=3001">
+            <%= games[i].name %>
+          </a>
+        </p>
+    <% } %>
   </body>
   <script type="text/javascript">
     // On accede à l'objet player en cours grace à : window.parent.player
-    var player = window.parent.player;
-
-    jQuery('#playerName').html(player.name);
+    // var player = window.parent.player;
+    //
+    // jQuery('#playerName').html(player.name);
 
   </script>
 </html>

@@ -1,6 +1,11 @@
+html{
+  height: 100%;
+}
+
 body{
-  background-color: #40b55b;
-  height: 100vh;
+  background-color: black;
+  height: 100%;
+  color: white;
 }
 
 
@@ -12,42 +17,38 @@ body{
 
 /* Main content */
 #main {
-  height: 83%;
+  height: 80%;
+}
+
+.main {
+  height: 100%;
 }
 
 /* Main content */
 footer {
   height: 5%;
   text-align: center;
-  font-size: xx-large;
+  font-size: 1em;
   font-family: monospace;
   font-weight: bold;
 }
 
-#annonce{
-  
-}
+/*#annonce{
+
+}*/
 
 
-.raw{
-  height: 100%;
-}
-img{
-  height: 100%;
-}
-#numberOfPlayer{
-  float:right;
-  padding:15px;
-  font-size: 3em;
+
+
+#numberOfPlayerZone{
+    text-align: center;
 }
 iframe{
   border: none;
   width: 100%;
-  height: 99%;
-  /*height:90vh;*/
 }
 
-ul {
+/*ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -58,7 +59,7 @@ ul {
 li {
     float: left;
     height: 100%;
-}
+}*/
 
 /*input[type="text"]:focus,
 input[type="text"].focus {
