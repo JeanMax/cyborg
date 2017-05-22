@@ -2,6 +2,12 @@ var express = require('express')
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var http = require('http');
+
+var httpProxy = require('http-proxy');
+
+var apiProxy = httpProxy.createProxyServer();
+
 
 var cyborgConfig = require('./cyborg-config.json');
 const exec = require('child_process').exec;
@@ -19,9 +25,74 @@ app.get('/',function (req,res,next) {
     console.log(`stdout: ${stdout}`);
     console.log(`stderr: ${stderr}`);
   });
+
   res.sendFile(__dirname+'/client/cyborg.html');
 });
 
+// app.get("/welcome/:url", function(req, res){
+//   req.url = req.params.url;
+//   console.log(req.url)
+//   console.log(req.originalUrl);
+//   apiProxy.web(req, res, { target: "http://localhost:3001/" });
+// });
+
+app.get("/welcome/*", function(req, res){
+  console.log(req.url)
+  console.log(req.originalUrl);
+  apiProxy.web(req, res, { target: "http://localhost:3001/" });
+});
+
+
+
+
+// app.get('/welcome/:path', function(req, res,next) {
+//   var path = '/'+ req.params.path;
+//   console.log(path)
+//   var options = {
+//     // host to forward to
+//     host:   'localhost',
+//     // port to forward to
+//     port:   3001,
+//     // path to forward to
+//     path:   path,
+//     // request method
+//     method: 'GET',
+//     // headers to send
+//     headers: req.headers
+//   };
+//
+//   var creq = http.request(options, function(cres) {
+//
+//     // set encoding
+//     cres.setEncoding('utf8');
+//
+//     // wait for data
+//     cres.on('data', function(chunk){
+//       res.write(chunk);
+//     });
+//
+//     cres.on('close', function(){
+//       // closed, let's end client request as well
+//       res.writeHead(cres.statusCode);
+//       res.end();
+//     });
+//
+//     cres.on('end', function(){
+//       // finished, let's finish client request as well
+//       // res.writeHead(cres.statusCode);
+//       res.end();
+//     });
+//
+//   }).on('error', function(e) {
+//     // we got an error, return 500 error to client and log error
+//     console.log(e.message);
+//     res.writeHead(500);
+//     res.end();
+//   });
+//
+//   creq.end();
+//
+// });
 
 
 server.listen(8080);

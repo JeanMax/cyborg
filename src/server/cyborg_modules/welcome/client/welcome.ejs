@@ -10,6 +10,7 @@
     <title></title>
   </head>
   <body>
+    <%= render %>
     <form id="formName" action="chooseGame" method="get" target="_self">
       <br>
       <br>
@@ -20,20 +21,20 @@
       <br>
       <br>
       <button type="submit"  id="validFormName">
-        <img src="/static/img/ok.png" alt="Valid form">
+        <img src="static/img/ok.png" alt="Valid form">
       </button>
     </form>
 
   </body>
   <script type="text/javascript">
     // On accede à l'objet cyborg en cours grace à : window.parent.cyborg
-    var cyborg = window.parent.cyborg;
-
-    //Get cyborg name
-    jQuery('#formName').submit(function () {
-      var cyborgName = jQuery('#cyborgNameInput').val();
-      cyborg.changeName(cyborgName.toString());
-    });
+    // var cyborg = window.parent.cyborg;
+    //
+    // //Get cyborg name
+    // jQuery('#formName').submit(function () {
+    //   var cyborgName = jQuery('#cyborgNameInput').val();
+    //   cyborg.changeName(cyborgName.toString());
+    // });
 
   </script>
 </html>
