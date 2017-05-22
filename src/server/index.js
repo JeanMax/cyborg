@@ -2,60 +2,77 @@ var express = require('express')
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var cookieSession = require('cookie-session');
-var cookielib = require('cookie');
-var bodyParser = require('body-parser');
-var platform = require('./lib/platform.js')();
-var AllGames = require('./games.json');
 
+var cyborgConfig = require('./cyborg-config.json');
+const exec = require('child_process').exec;
 
-app.set('views', __dirname+'/client/views');
-// app.set('view engine', 'ejs');
-
+app.set('views', __dirname+'/client');
 app.use('/static',express.static('client/static/'));
 
 
-app.use(bodyParser.json());       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-}));
-
-app.set('view engine', 'ejs');
-
-// app.use('/',function (req,res,next) {
-//   res.sendFile(__dirname+'/client/'+'index.html');
-// });
-
-
 app.get('/',function (req,res,next) {
-  res.sendFile(__dirname+'/client/base.html');
+  exec('cd ./cyborg_modules/welcome; node index.js', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+  });
+  res.sendFile(__dirname+'/client/cyborg.html');
 });
 
-app.get('/welcome',function (req,res,next) {
-  res.sendFile(__dirname+'/client/welcome.html');
+
+
+server.listen(8080);
+
+//
+io.on('connection',function (socketClient) {
+  io.emit("numberOfPlayer",io.engine.clientsCount)
+  //console.log("Un nouveau joueur s'est connecté :)");
+
+  socketClient.on('newName', function (nom) {
+    socketClient.broadcast.emit('annonce', nom + " est connecté");
+  });
+
+  socketClient.on('changeName', function (nameObj) {
+    socketClient.broadcast.emit('annonce',nameObj.old + " a changé son nom en "+ nameObj.new);
+  });
+
+
+  socketClient.on('disconnect', function () {
+    socketClient.broadcast.emit("Un joueur s'est déconnecté :(");
+    io.emit("numberOfPlayer",io.engine.clientsCount)
+  });
 });
+
+// app.get('/welcome',function (req,res,next) {
+//   res.sendFile(__dirname+'/client/welcome.html');
+// });
+//
+// app.get('/chooseGame',function (req,res,next) {
+//
+//   var games = AllGames.games;
+//   res.render('chooseGame',{games:games});
+// });
+//
+// app.get('/newGame',function (req,res,next) {
+//   // TODO Refaire :)
+//   var idGame = req.query.name.toString().trim();
+//   var picked = AllGames.games.find(function (game) {
+//     return game.id == idGame;
+//   });
+//   var gameName = picked.name;
+//
+//   res.render("waitforplayer",{title:gameName})
+// });
 
 // app.get('/chooseGame',function (req,res,next) {
 //   console.log(games);
 //   res.sendFile(__dirname+'/client/chooseGame.html');
 // });
 
-app.get('/chooseGame',function (req,res,next) {
 
-  var games = AllGames.games;
-  res.render('chooseGame',{games:games});
-});
-
-app.get('/newGame',function (req,res,next) {
-  // TODO Refaire :)
-  var idGame = req.query.name.toString().trim();
-  var picked = AllGames.games.find(function (game) {
-    return game.id == idGame;
-  });
-  var gameName = picked.name;
-  
-  res.render("waitforplayer",{title:gameName})
-});
 
 // app.use('/*',function (req,res,next) {
 //   res.sendFile(__dirname+'/client/'+'index.html');
@@ -119,28 +136,3 @@ app.get('/newGame',function (req,res,next) {
 //   }
 //
 // });
-
-
-server.listen(80);
-
-//
-io.on('connection',function (socketClient) {
-
-  //console.log("Un nouveau joueur s'est connecté :)");
-
-  socketClient.on('newName', function (nom) {
-    socketClient.broadcast.emit('annonce', nom + " est arrivé :)");
-    io.emit("numberOfPlayer",io.engine.clientsCount)
-  });
-
-  socketClient.on('changeName', function (nameObj) {
-    socketClient.broadcast.emit('annonce',nameObj.old + " a changé son nom en "+ nameObj.new);
-    io.emit("numberOfPlayer",io.engine.clientsCount)
-  });
-
-
-  socketClient.on('disconnect', function () {
-    socketClient.broadcast.emit("Un joueur s'est déconnecté :s");
-    io.emit("numberOfPlayer",io.engine.clientsCount)
-  });
-});

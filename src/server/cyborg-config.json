@@ -1,0 +1,15 @@
+{
+  "games":[
+    {
+      "name":"Courte-paille",
+      "id":"cp"
+    },
+    {
+      "name":"Pierre Feuille Ciseaux",
+      "id":"pfc"
+    }
+  ],
+  "main" : {
+      "name":"welcome"
+  }
+}

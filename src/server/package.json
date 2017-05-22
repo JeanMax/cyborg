@@ -4,6 +4,7 @@
   "description": "cyborg is a game plateform for smartphone game without app",
   "main": "index.js",
   "scripts": {
+    "start": "forever -w index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -19,5 +20,8 @@
     "ejs": "^2.5.6",
     "express": "^4.15.2",
     "socket.io": "^1.7.3"
+  },
+  "devDependencies": {
+    "forever": "^0.15.3"
   }
 }

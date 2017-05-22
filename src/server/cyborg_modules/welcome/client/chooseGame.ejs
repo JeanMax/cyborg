@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="static/css/platform.css" media="screen" title="no title" charset="utf-8">
+
+    <script src="static/js/jquery-3.2.1.js" charset="utf-8"></script>
+
+    <title></title>
+  </head>
+  <body>
+    <h1>Choisis un jeu:</h1>
+
+    <% for(var i=0; i<games.length; i++) {%>
+        <p>
+          <!-- <a href="/" onclick="javascript:event.target.port=3001"> -->
+          <a href="newgame?name= <%-games[i].id-%>">
+            <%= games[i].name %>
+          </a>
+        </p>
+    <% } %>
+  </body>
+  <script type="text/javascript">
+    // On accede à l'objet cyborg en cours grace à : window.parent.cyborg
+    // var cyborg = window.parent.cyborg;
+    //
+    // jQuery('#cyborgName').html(cyborg.name);
+
+  </script>
+</html>

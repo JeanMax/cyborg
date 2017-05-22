@@ -1,0 +1,33 @@
+body{
+  background-color: #dbf5e1;
+  color: black;
+  text-align: center;
+  font-family: monospace;
+}
+
+div.main{
+  position: relative;;
+  top: 20%;
+}
+
+#cyborgNameInput {
+  text-align: center;
+  font-family: monospace;
+  font-weight: bold;
+  color: black;
+  background-color: #dbf5e1;
+  border: none;
+  border-bottom: solid 4px black;
+}
+
+#validFormName{
+  background-color: transparent;
+  border: none;
+}
+
+button{
+  background-color: black;
+  color: white;
+  font-size: 200%;
+  cursor: pointer;
+}
