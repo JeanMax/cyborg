@@ -14,7 +14,7 @@ module.exports.start = function (port) {
 
 
   app.get('/home',function (req,res,next) {
-      res.render('welcome',{render:""});
+      res.render('welcome');
   });
 
   app.get('/chooseGame',function (req,res,next) {
