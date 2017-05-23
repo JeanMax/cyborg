@@ -7,11 +7,18 @@ var http = require('http');
 var httpProxy = require('http-proxy');
 var cyborgConfig = require('./cyborg-config.json');
 var welcome = require('./cyborg_modules/'+cyborgConfig.main.name);
-var port = 3000;
-
+var courtePaille = require('./cyborg_modules/courte-paille/index.js');
+var initPort = 3000;
 var apiProxy = httpProxy.createProxyServer({ws:true});
-cyborgConfig.main.port = port;
-welcome.start(cyborgConfig.main.port);
+
+// Start welcome app
+cyborgConfig.io = io;
+cyborgConfig.main.port = initPort;
+welcome.start(cyborgConfig);
+
+initPort += 1;
+cyborgConfig.port = initPort;
+courtePaille.start(cyborgConfig);
 
 
 app.set('views', __dirname+'/client');
@@ -23,15 +30,20 @@ app.get('/',function (req,res,next) {
 
 app.all("/"+cyborgConfig.main.name+"/*", function(req, res){
   req.url = req.url.replace("/"+cyborgConfig.main.name, "");
-  apiProxy.web(req, res, { target: "http://localhost:"+cyborgConfig.main.port+"/" });
+  var urlTarget = "http://localhost:"+cyborgConfig.main.port+"/";
+  apiProxy.web(req, res, { target: urlTarget });
+});
+
+app.all("/game/*", function(req, res){
+  req.url = req.url.replace("/game", "");
+  var urlTarget = "http://localhost:"+cyborgConfig.port+"/";
+  apiProxy.web(req, res, { target: urlTarget });
 });
 
 server.listen(8080);
 
-//
 io.on('connection',function (socketClient) {
   io.emit("numberOfPlayer",io.engine.clientsCount)
-  //console.log("Un nouveau joueur s'est connecté :)");
 
   socketClient.on('newName', function (nom) {
     socketClient.broadcast.emit('annonce', nom + " est connecté");
@@ -41,12 +53,12 @@ io.on('connection',function (socketClient) {
     socketClient.broadcast.emit('annonce',nameObj.old + " a changé son nom en "+ nameObj.new);
   });
 
-
   socketClient.on('disconnect', function () {
     socketClient.broadcast.emit("Un joueur s'est déconnecté :(");
     io.emit("numberOfPlayer",io.engine.clientsCount)
   });
 });
+
 
 // app.get('/welcome',function (req,res,next) {
 //   res.sendFile(__dirname+'/client/welcome.html');

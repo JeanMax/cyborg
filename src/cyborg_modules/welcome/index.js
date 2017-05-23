@@ -1,11 +1,11 @@
-module.exports.start = function (port) {
 
-  var express = require('express')
-  var app = express();
-  var server = require('http').Server(app);
-  var path = require("path");
+var express = require('express')
+var app = express();
+var server = require('http').Server(app);
+var path = require("path");
 
-  var AllGames = require('../../cyborg-config.json');
+
+module.exports.start = function (cyborgConfig,callback) {
 
   app.use('/static',express.static(path.join(__dirname, './client/static')));
 
@@ -19,20 +19,31 @@ module.exports.start = function (port) {
 
   app.get('/chooseGame',function (req,res,next) {
 
-    var games = AllGames.games;
+    var games = cyborgConfig.games;
     res.render('chooseGame',{games:games});
   });
 
   app.get('/newGame',function (req,res,next) {
     // TODO Refaire :)
     var idGame = req.query.name.toString().trim();
-    var picked = AllGames.games.find(function (game) {
+    var picked = cyborgConfig.games.find(function (game) {
       return game.id == idGame;
     });
     var gameName = picked.name;
 
-    res.render("waitforplayer",{title:gameName})
+    res.render("waitforplayer",{title:gameName});
   });
 
-  server.listen(port);
+  server.listen(cyborgConfig.main.port,callback);
+
+  // cyborgConfig.io.on('connection',function (socketClient) {
+  //   socketClient.on('newName', function (nom) {
+  //     console.log("Bonjour "+nom)
+  //   });
+  // });
+
+}
+
+module.exports.stop = function (callback) {
+  server.close(callback);
 }
