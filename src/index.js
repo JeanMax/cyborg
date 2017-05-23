@@ -20,7 +20,7 @@ initPort += 1;
 cyborgConfig.port = initPort;
 courtePaille.start(cyborgConfig);
 
-
+// Repertoire contenant les vues, ainsi que les assets clients accessible par tous.
 app.set('views', __dirname+'/client');
 app.use('/static',express.static('client/static/'));
 
@@ -28,17 +28,43 @@ app.get('/',function (req,res,next) {
   res.sendFile(__dirname+'/client/cyborg.html');
 });
 
-app.all("/"+cyborgConfig.main.name+"/*", function(req, res){
-  req.url = req.url.replace("/"+cyborgConfig.main.name, "");
-  var urlTarget = "http://localhost:"+cyborgConfig.main.port+"/";
-  apiProxy.web(req, res, { target: urlTarget });
+//Singleton welcome application d'acceuil
+/*
+* Recupere les informations sur le joueur (nom)
+* Propose de créer et de rejoindre une partie
+*/
+app.all("/welcome/*", function(req, res){
+  // req.url = req.url.replace("/"+cyborgConfig.main.name, "");
+  // var urlTarget = "http://localhost:"+cyborgConfig.main.port+"/";
+  // apiProxy.web(req, res, { target: urlTarget });
 });
 
-app.all("/game/*", function(req, res){
-  req.url = req.url.replace("/game", "");
-  var urlTarget = "http://localhost:"+cyborgConfig.port+"/";
-  apiProxy.web(req, res, { target: urlTarget });
+//Lancement d'un nouveau jeu
+/*
+* Creation d'un instance de ce jeu, avec un id (gameId)
+*/
+app.get("/new/:gameName", function(req, res){
+  // req.url = req.url.replace("/"+cyborgConfig.main.name, "");
+  // var urlTarget = "http://localhost:"+cyborgConfig.main.port+"/";
+  // apiProxy.web(req, res, { target: urlTarget });
 });
+
+
+//Lancement d'un nouveau jeu
+/*
+* Redirection vers le jeu ayant l'id gameId
+*/
+app.all("/game/:gameId/*", function(req, res){
+  // req.url = req.url.replace("/game", "");
+  // var urlTarget = "http://localhost:"+cyborgConfig.port+"/";
+  // apiProxy.web(req, res, { target: urlTarget });
+});
+
+// app.all("/game/*", function(req, res){
+//   req.url = req.url.replace("/game", "");
+//   var urlTarget = "http://localhost:"+cyborgConfig.port+"/";
+//   apiProxy.web(req, res, { target: urlTarget });
+// });
 
 server.listen(8080);
 
