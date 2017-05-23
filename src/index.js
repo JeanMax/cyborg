@@ -5,95 +5,26 @@ var io = require('socket.io')(server);
 var http = require('http');
 
 var httpProxy = require('http-proxy');
-
-var apiProxy = httpProxy.createProxyServer();
-
-
 var cyborgConfig = require('./cyborg-config.json');
-const exec = require('child_process').exec;
+var welcome = require('./cyborg_modules/'+cyborgConfig.main.name);
+var port = 3000;
+
+var apiProxy = httpProxy.createProxyServer({ws:true});
+cyborgConfig.main.port = port;
+welcome.start(cyborgConfig.main.port);
+
 
 app.set('views', __dirname+'/client');
 app.use('/static',express.static('client/static/'));
 
-
 app.get('/',function (req,res,next) {
-  exec('cd ./cyborg_modules/welcome; node index.js', (error, stdout, stderr) => {
-    if (error) {
-      console.error(`exec error: ${error}`);
-      return;
-    }
-    console.log(`stdout: ${stdout}`);
-    console.log(`stderr: ${stderr}`);
-  });
-
   res.sendFile(__dirname+'/client/cyborg.html');
 });
 
-// app.get("/welcome/:url", function(req, res){
-//   req.url = req.params.url;
-//   console.log(req.url)
-//   console.log(req.originalUrl);
-//   apiProxy.web(req, res, { target: "http://localhost:3001/" });
-// });
-
-app.get("/welcome/*", function(req, res){
-  console.log(req.url)
-  console.log(req.originalUrl);
-  apiProxy.web(req, res, { target: "http://localhost:3001/" });
+app.all("/"+cyborgConfig.main.name+"/*", function(req, res){
+  req.url = req.url.replace("/"+cyborgConfig.main.name, "");
+  apiProxy.web(req, res, { target: "http://localhost:"+cyborgConfig.main.port+"/" });
 });
-
-
-
-
-// app.get('/welcome/:path', function(req, res,next) {
-//   var path = '/'+ req.params.path;
-//   console.log(path)
-//   var options = {
-//     // host to forward to
-//     host:   'localhost',
-//     // port to forward to
-//     port:   3001,
-//     // path to forward to
-//     path:   path,
-//     // request method
-//     method: 'GET',
-//     // headers to send
-//     headers: req.headers
-//   };
-//
-//   var creq = http.request(options, function(cres) {
-//
-//     // set encoding
-//     cres.setEncoding('utf8');
-//
-//     // wait for data
-//     cres.on('data', function(chunk){
-//       res.write(chunk);
-//     });
-//
-//     cres.on('close', function(){
-//       // closed, let's end client request as well
-//       res.writeHead(cres.statusCode);
-//       res.end();
-//     });
-//
-//     cres.on('end', function(){
-//       // finished, let's finish client request as well
-//       // res.writeHead(cres.statusCode);
-//       res.end();
-//     });
-//
-//   }).on('error', function(e) {
-//     // we got an error, return 500 error to client and log error
-//     console.log(e.message);
-//     res.writeHead(500);
-//     res.end();
-//   });
-//
-//   creq.end();
-//
-// });
-
 
 server.listen(8080);
 

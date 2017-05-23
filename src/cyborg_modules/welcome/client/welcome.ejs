@@ -5,7 +5,7 @@
     <!-- Mon style -->
     <link rel="stylesheet" href="static/css/welcome.css" media="screen" title="no title" charset="utf-8">
 
-    <script src="static/js/jquery-3.2.1.js" charset="utf-8"></script>
+    <script src="/static/js/jquery-3.2.1.js" charset="utf-8"></script>
 
     <title></title>
   </head>
@@ -28,13 +28,13 @@
   </body>
   <script type="text/javascript">
     // On accede à l'objet cyborg en cours grace à : window.parent.cyborg
-    // var cyborg = window.parent.cyborg;
-    //
-    // //Get cyborg name
-    // jQuery('#formName').submit(function () {
-    //   var cyborgName = jQuery('#cyborgNameInput').val();
-    //   cyborg.changeName(cyborgName.toString());
-    // });
+    var cyborg = window.parent.cyborg;
+
+    //Get cyborg name
+    jQuery('#formName').submit(function () {
+      var cyborgName = jQuery('#cyborgNameInput').val();
+      cyborg.changeName(cyborgName.toString());
+    });
 
   </script>
 </html>
