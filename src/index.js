@@ -1,44 +1,36 @@
-var express = require('express')
-var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-var http = require('http');
+const express = require('express')
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+const ip = require("ip").address();
 
-var httpProxy = require('http-proxy');
-var cyborgConfig = require('./cyborg-config.json');
-var welcome = require('./cyborg_modules/'+cyborgConfig.main.name);
-var courtePaille = require('./cyborg_modules/courte-paille/index.js');
+var welcome = require('./welcome')
 var initPort = 3000;
-var apiProxy = httpProxy.createProxyServer({ws:true});
+
 
 var child = require('child_process').fork('./cyborg_modules/pfc/index.js');
-// Start welcome app
-cyborgConfig.io = io;
-cyborgConfig.main.port = initPort;
-welcome.start(cyborgConfig);
 
-// initPort += 1;
-// cyborgConfig.port = initPort;
-// courtePaille.start(cyborgConfig);
 
 // Repertoire contenant les vues, ainsi que les assets clients accessible par tous.
-app.set('views', __dirname+'/client');
+app.set('views', __dirname+'/client/views');
 app.use('/static',express.static('client/static/'));
 
+app.set('view engine', 'ejs')
+
+//Template cyborg
 app.get('/',function (req,res,next) {
-  res.sendFile(__dirname+'/client/cyborg.html');
+  res.render('cyborg');
 });
+
+//Welcome route
+app.use("/welcome",welcome);
+
 
 //Singleton welcome application d'acceuil
 /*
 * Recupere les informations sur le joueur (nom)
 * Propose de créer et de rejoindre une partie
 */
-app.all("/welcome/*", function(req, res){
-  // req.url = req.url.replace("/"+cyborgConfig.main.name, "");
-  // var urlTarget = "http://localhost:"+cyborgConfig.main.port+"/";
-  // apiProxy.web(req, res, { target: urlTarget });
-});
 
 //Lancement d'un nouveau jeu
 /*
@@ -55,11 +47,11 @@ app.get("/new/:gameName", function(req, res){
 /*
 * Redirection vers le jeu ayant l'id gameId
 */
-app.all("/game/:gameId/*", function(req, res){
-  // req.url = req.url.replace("/game", "");
-  // var urlTarget = "http://localhost:"+cyborgConfig.port+"/";
-  // apiProxy.web(req, res, { target: urlTarget });
-});
+// app.all("/game/:gameId/*", function(req, res){
+//   // req.url = req.url.replace("/game", "");
+//   // var urlTarget = "http://localhost:"+cyborgConfig.port+"/";
+//   // apiProxy.web(req, res, { target: urlTarget });
+// });
 
 // app.all("/game/*", function(req, res){
 //   req.url = req.url.replace("/game", "");
