@@ -1,0 +1,17 @@
+{
+  "name": "pfc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gouayave <guillaume.gence@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "connect": "^3.6.2",
+    "express": "^4.15.3",
+    "pug": "^2.0.0-rc.1"
+  }
+}
