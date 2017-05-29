@@ -1,5 +1,5 @@
 // Param
-var port = 3000;
+var port = 3001;
 var nbJoueursMax = 2;
 var idJoueur = 0;
 

@@ -11,14 +11,15 @@ var courtePaille = require('./cyborg_modules/courte-paille/index.js');
 var initPort = 3000;
 var apiProxy = httpProxy.createProxyServer({ws:true});
 
+var child = require('child_process').fork('./cyborg_modules/pfc/index.js');
 // Start welcome app
 cyborgConfig.io = io;
 cyborgConfig.main.port = initPort;
 welcome.start(cyborgConfig);
 
-initPort += 1;
-cyborgConfig.port = initPort;
-courtePaille.start(cyborgConfig);
+// initPort += 1;
+// cyborgConfig.port = initPort;
+// courtePaille.start(cyborgConfig);
 
 // Repertoire contenant les vues, ainsi que les assets clients accessible par tous.
 app.set('views', __dirname+'/client');
@@ -67,6 +68,7 @@ app.all("/game/:gameId/*", function(req, res){
 // });
 
 server.listen(8080);
+
 
 io.on('connection',function (socketClient) {
   io.emit("numberOfPlayer",io.engine.clientsCount)
