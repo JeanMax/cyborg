@@ -1,45 +1,90 @@
 const express = require('express')
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
-const ip = require("ip").address();
+const sio = require('socket.io')(server);
+const session = require("express-session");
 
-var welcome = require('./welcome')
-var initPort = 3000;
+const welcome = require('./routes/welcome');
+const game = require('./routes/games');
+const settings = require('./routes/settings');
+const chat = require('./routes/chat');
 
+var suid = 0;
 
-var child = require('child_process').fork('./cyborg_modules/pfc/index.js');
-
+// On accéde à config dans les autre fichiers routes grace à req.app.get('config')
+var cyborgConfig = require('./cyborg-config.json');
+app.set('config', cyborgConfig);
 
 // Repertoire contenant les vues, ainsi que les assets clients accessible par tous.
 app.set('views', __dirname+'/client/views');
 app.use('/static',express.static('client/static/'));
 
+// Utilisation du moteur de rendu ejs
 app.set('view engine', 'ejs')
+
+// Session -->
+// On peut aussi mettre l'accés à une base de données
+// https://stackoverflow.com/questions/25532692/how-to-share-sessions-with-socket-io-1-x-and-express-4-x
+var secret = cyborgConfig.secret_session;
+var sessionMiddleware = session({
+    secret: secret
+});
+
+// Session dans les sockets
+sio.use(function(socket, next) {
+    sessionMiddleware(socket.request, socket.request.res, next);
+});
+
+// Session dans les requetes
+app.use(sessionMiddleware);
+// <-- Session
+
 
 //Template cyborg
 app.get('/',function (req,res,next) {
+  // On assigne un suid à la première connection
+  if(!req.session.suid){
+    req.session.suid = ++suid;
+  }
   res.render('cyborg');
 });
 
 //Welcome route
+//Create or access your profil, select a game, wait for game begin
 app.use("/welcome",welcome);
 
+//games route
+//Start, Kill, Pause, Save game
+app.use("/game",game);
 
-//Singleton welcome application d'acceuil
-/*
-* Recupere les informations sur le joueur (nom)
-* Propose de créer et de rejoindre une partie
-*/
+//games route
+//Config your reachable peripheral devices, ex: volume of sound, connected devices, ect...
+app.use("/settings",settings);
 
-//Lancement d'un nouveau jeu
-/*
-* Creation d'un instance de ce jeu, avec un id (gameId)
-*/
-app.get("/new/:gameName", function(req, res){
-  // req.url = req.url.replace("/"+cyborgConfig.main.name, "");
-  // var urlTarget = "http://localhost:"+cyborgConfig.main.port+"/";
-  // apiProxy.web(req, res, { target: urlTarget });
+//chat route
+//Chat with other players, games can settings chat rooms
+app.use("/chat",chat);
+
+
+server.listen(8080);
+
+
+sio.on('connection',function (socketClient) {
+  //socket.request.session // Socket session in io
+  sio.emit("numberOfPlayer",sio.engine.clientsCount)
+
+  socketClient.on('newName', function (nom) {
+    socketClient.broadcast.emit('annonce', nom + " est connecté");
+  });
+
+  socketClient.on('changeName', function (nameObj) {
+    socketClient.broadcast.emit('annonce',nameObj.old + " a changé son nom en "+ nameObj.new);
+  });
+
+  socketClient.on('disconnect', function () {
+    socketClient.broadcast.emit("Un joueur s'est déconnecté :(");
+    sio.emit("numberOfPlayer",sio.engine.clientsCount)
+  });
 });
 
 
@@ -58,27 +103,6 @@ app.get("/new/:gameName", function(req, res){
 //   var urlTarget = "http://localhost:"+cyborgConfig.port+"/";
 //   apiProxy.web(req, res, { target: urlTarget });
 // });
-
-server.listen(8080);
-
-
-io.on('connection',function (socketClient) {
-  io.emit("numberOfPlayer",io.engine.clientsCount)
-
-  socketClient.on('newName', function (nom) {
-    socketClient.broadcast.emit('annonce', nom + " est connecté");
-  });
-
-  socketClient.on('changeName', function (nameObj) {
-    socketClient.broadcast.emit('annonce',nameObj.old + " a changé son nom en "+ nameObj.new);
-  });
-
-  socketClient.on('disconnect', function () {
-    socketClient.broadcast.emit("Un joueur s'est déconnecté :(");
-    io.emit("numberOfPlayer",io.engine.clientsCount)
-  });
-});
-
 
 // app.get('/welcome',function (req,res,next) {
 //   res.sendFile(__dirname+'/client/welcome.html');

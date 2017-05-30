@@ -1,17 +1,13 @@
 
 var express = require('express')
 var router = express.Router()
-var path = require("path");
-const ip = require("ip").address();
-
-var cyborgConfig = require('./cyborg-config.json');
 
 router.get('/home',function (req,res,next) {
     res.render('welcome');
 });
 
 router.get('/chooseGame',function (req,res,next) {
-  var games = cyborgConfig.games;
+  var games = req.app.get('config').games;
   res.render('chooseGame',{games:games});
 });
 
@@ -28,14 +24,6 @@ router.get('/newGame',function (req,res,next) {
     uriGame: uriGame
   });
 });
-
-
-
-  // cyborgConfig.io.on('connection',function (socketClient) {
-  //   socketClient.on('newName', function (nom) {
-  //     console.log("Bonjour "+nom)
-  //   });
-  // });
 
 
 module.exports = router
