@@ -1,5 +1,6 @@
 // Param
-var port = 3001;
+
+var port = Number(process.argv[2]);
 var nbJoueursMax = 2;
 var idJoueur = 0;
 
@@ -75,16 +76,18 @@ app.get('/result',hasIdJoueur, function (req, res) {
 
    if(pfc.isOk()){
      eventEmitter.emit('result');
+     var winner = pfc.result();
+     process.send({ state: "FINISH", winner : winner});
    }
 
 })
 
-app.get('/resultFin', function (req, res) {
-  res.send("Le gagnant est "+ pfc.result() );
-  process.send({ state: "KILLME"});
-})
+// app.get('/resultFin', function (req, res) {
+//   res.send("Le gagnant est "+ pfc.result() );
+//
+// })
 
 app.listen(port, function () {
-  console.log('Example app listening on port 3000!')
-  process.send({ state: "OK"});
+  console.log('Example app listening on port '+port)
+  process.send({ state: "READY"});
 })

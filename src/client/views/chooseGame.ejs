@@ -12,13 +12,24 @@
     <title>Choose game</title>
   </head>
   <body>
-    <h1>Choisis un jeu:</h1>
+    <h1>Parties en cours :</h1>
 
-    <% for(var i=0; i<games.length; i++) {%>
+    <% for(var i=0; i<instanceGames.length; i++) {%>
         <p>
           <!-- <a href="/" onclick="javascript:event.target.port=3001"> -->
-          <a href="/game/new/<%-games[i].id-%>">
-            <%= games[i].name %>
+          <a href="<%-instanceGames[i].url-%>">
+            <%= instanceGames[i].name %>
+          </a>
+        </p>
+    <% } %>
+
+    <h1>Choisis un jeu:</h1>
+
+    <% for(var i=0; i<allGames.length; i++) {%>
+        <p>
+          <!-- <a href="/" onclick="javascript:event.target.port=3001"> -->
+          <a href="/game/new/<%-allGames[i].id-%>">
+            <%= allGames[i].name %>
           </a>
         </p>
     <% } %>

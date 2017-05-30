@@ -7,6 +7,8 @@
 
 exports.startGame = startGame;
 exports.stopGame = stopGame;
+exports.getGameInstances = getGameInstances;
+
 
 const ip = require("ip").address();
 const child_process = require('child_process')
@@ -21,40 +23,52 @@ const MAX_PORT = INIT_PORT + RANGE_PORT;
 var gamesProcess = [];
 
 function startGame(name,arraySessions,callback) {
-  _getPort(function (port,err) {
+  _getPort(INIT_PORT,function (port,err) {
     if(err){
       throw err
     }
     var pathgame = path.join(PATH_CYB_MODS,name);
-    console.log(pathgame)
-    var child = child_process.fork(pathgame);
+
+    var child = child_process.fork(pathgame,[port]);
     var url = "http://"+ip+":"+port;
 
-    var idgame = gamesProcess.push(child) - 1;
+    // La fonction push renvoi la longueur de la liste et non la position
+    var length = gamesProcess.push({
+      prog: child,
+      name : name,
+      url : url
+    });
 
-    callback(idgame,url)
 
-    // child.on('message', (m) => {
-    //   if(m.state === "READY"){
-    //     callback(idgame,url)
-    //   }
-    // });
-    //
-    // child.on('message', (m) => {
-    //   if(m.state === "KILLME"){
-    //     stopGame(idgame);
-    //   }
-    // });
+    child.on('message', (m) => {
+      if(m.state === "READY"){
+        callback(length - 1,url,child)
+      }
+    });
+
+    child.on('message', (m) => {
+      if(m.state === "FINISH"){
+        stopGame(length - 1);
+      }
+    });
 
   })
 }
 
 function stopGame(idGame) {
-  var child = gamesProcess[idGame];
+  var child = gamesProcess[idGame].prog;
   if(child){
-    gamesProcess[idGame].kill("SIGKILL");
+    child.kill("SIGKILL");
     gamesProcess.splice(idGame, 1);
   }
+}
+
+function getGameInstances() {
+  return gamesProcess.map(function (g) {
+    var name = g.name;
+    var url = g.url;
+    return {name:name,url:url};
+  })
 }
 
 function _isPortAvailble(port,callback) {
@@ -75,27 +89,35 @@ function _isPortAvailble(port,callback) {
 }
 
 // Callback (portAvailable, err)
-function _getPort (callback) {
+// TODO: Refaire !!!
+function _getPort (port,callback) {
 
-  var i = 0;
-  i++;
-  
-  function nextPort() {
-    var portToTest = INIT_PORT + i;
-    if(portToTest < MAX_PORT ){
-      _isPortAvailble(portToTest,function (isAvaible) {
-        if(isAvaible){
-          callback(portToTest,null)
-        }else {
-
-          nextPort();
-        }
-      })
-    }else{
-      callback(null,"out of range")
+  _isPortAvailble(port,function (isAvaible) {
+    if(isAvaible){
+      callback(port,null)
+    }else {
+      _getPort(port+1,callback);
     }
-  }
-  nextPort();
+  })
+
+
+
+  // function nextPort() {
+  //   i++;
+  //   var portToTest = INIT_PORT + i;
+  //   if(portToTest < MAX_PORT ){
+  //     _isPortAvailble(portToTest,function (isAvaible) {
+  //       if(isAvaible){
+  //         callback(portToTest,null)
+  //       }else {
+  //         nextPort();
+  //       }
+  //     })
+  //   }else{
+  //     callback(null,"out of range")
+  //   }
+  // }
+  // nextPort();
 }
 
 // startGame("pfc",[],function (idGame,url) {
