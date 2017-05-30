@@ -14,7 +14,7 @@ router.get('/chooseGame',function (req,res,next) {
 router.get('/newGame',function (req,res,next) {
   // TODO Refaire :)
   var idGame = req.query.name.toString().trim();
-  var picked = cyborgConfig.games.find(function (game) {
+  var picked = req.app.get('config').games.find(function (game) {
     return game.id == idGame;
   });
   var gameName = picked.name;

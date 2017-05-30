@@ -81,8 +81,10 @@ app.get('/result',hasIdJoueur, function (req, res) {
 
 app.get('/resultFin', function (req, res) {
   res.send("Le gagnant est "+ pfc.result() );
+  process.send({ state: "KILLME"});
 })
 
 app.listen(port, function () {
   console.log('Example app listening on port 3000!')
+  process.send({ state: "OK"});
 })

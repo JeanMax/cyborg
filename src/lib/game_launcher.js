@@ -5,44 +5,99 @@
 *Renvoie l'url
 */
 
+exports.startGame = startGame;
+exports.stopGame = stopGame;
 
 const ip = require("ip").address();
-const testServer = require("net").createServer();
+const child_process = require('child_process')
+const net = require("net");
+const path = require("path");
 
-const INIT_PORT = 3;
-const RANGE_PORT = 10;
+const INIT_PORT = 3000;
+const RANGE_PORT = 100;
+const PATH_CYB_MODS = path.join(__dirname,"../cyborg_modules/");
+const MAX_PORT = INIT_PORT + RANGE_PORT;
 
-/*
-* Renvoie un numéro de port comprit dans la range si il est disponible
-*
-*/
-function _getPort() {
+var gamesProcess = [];
 
-  var port = INIT_PORT;
-  var i = 0;
-  var find = false;
-  var actualPort ;
-
-  while (i < RANGE_PORT ) {
-    availablePort = INIT_PORT + i;
-    console.log(availablePort);
-
-    try {
-      testServer.listen(availablePort);
-      console.log("OK");
-    } catch (e) {
-      console.error(e);
-    } finally {
-
+function startGame(name,arraySessions,callback) {
+  _getPort(function (port,err) {
+    if(err){
+      throw err
     }
+    var pathgame = path.join(PATH_CYB_MODS,name);
+    console.log(pathgame)
+    var child = child_process.fork(pathgame);
+    var url = "http://"+ip+":"+port;
 
-    i ++;
+    var idgame = gamesProcess.push(child) - 1;
 
-  }
+    callback(idgame,url)
 
+    // child.on('message', (m) => {
+    //   if(m.state === "READY"){
+    //     callback(idgame,url)
+    //   }
+    // });
+    //
+    // child.on('message', (m) => {
+    //   if(m.state === "KILLME"){
+    //     stopGame(idgame);
+    //   }
+    // });
 
+  })
 }
 
-_getPort();
+function stopGame(idGame) {
+  var child = gamesProcess[idGame];
+  if(child){
+    gamesProcess[idGame].kill("SIGKILL");
+    gamesProcess.splice(idGame, 1);
+  }
+}
 
-// var child = require('child_process').fork('./cyborg_modules/pfc/index.js');
+function _isPortAvailble(port,callback) {
+
+  var testServer = net.createServer();
+
+  testServer.on('error', (err) => {
+    testServer.close();
+    callback(false);
+  });
+
+  testServer.on('listening', (err) => {
+    testServer.close();
+    callback(true)
+  });
+
+  testServer.listen(port);
+}
+
+// Callback (portAvailable, err)
+function _getPort (callback) {
+
+  var i = 0;
+  i++;
+  
+  function nextPort() {
+    var portToTest = INIT_PORT + i;
+    if(portToTest < MAX_PORT ){
+      _isPortAvailble(portToTest,function (isAvaible) {
+        if(isAvaible){
+          callback(portToTest,null)
+        }else {
+
+          nextPort();
+        }
+      })
+    }else{
+      callback(null,"out of range")
+    }
+  }
+  nextPort();
+}
+
+// startGame("pfc",[],function (idGame,url) {
+//   // stopGame(idGame)
+// })
