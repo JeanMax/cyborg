@@ -2,7 +2,6 @@ const path = require('path')
 const express = require('express')
 const app = express()
 const events = require('events');
-const connect = require('connect');
 const pfc = require('./lib/pfc.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -24,7 +23,7 @@ var sessionMiddleware = session({
 });
 
 app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'pug')
+app.set('view engine', 'ejs')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
