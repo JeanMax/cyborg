@@ -12,6 +12,10 @@ router.get('/chooseGame',function (req,res,next) {
   var allGames = req.app.get('config').games;
   var instanceGames = gameLib.getGameInstances();
 
+  for (instanceGame of instanceGames) {
+    instanceGame.url = instanceGame.url +"?suid="+req.session.suid;
+  }
+
   res.render('chooseGame',{
     allGames: allGames,
     instanceGames: instanceGames
@@ -19,11 +23,11 @@ router.get('/chooseGame',function (req,res,next) {
 });
 
 router.get('/new/:gameName',function (req,res,next) {
-    
+
     var gameName = req.params.gameName.toString().trim();
 
-    gameLib.startGame(gameName,[],function (idGame,url,child) {
-      var uriGame = url;
+    gameLib.startGame(gameName,[1,2,3],function (idGame,url,child) {
+      var uriGame = url+"?suid="+req.session.suid;
 
       res.render("waitforplayer",{
         title:gameName,

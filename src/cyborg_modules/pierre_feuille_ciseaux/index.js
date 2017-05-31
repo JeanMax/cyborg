@@ -1,9 +1,3 @@
-// Param
-
-var port = Number(process.argv[2]);
-var nbJoueursMax = 2;
-var idJoueur = 0;
-
 const path = require('path')
 const express = require('express')
 const app = express()
@@ -12,13 +6,22 @@ const connect = require('connect');
 const pfc = require('./lib/pfc.js');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+var argv = require('minimist')(process.argv.slice(2));
 
+const cyborgConfig = require('../../cyborg-config.json');
+
+
+var port = argv.p;
+var listPlayer = argv._;
+pfc.setIds(listPlayer);
 
 var eventEmitter = new events.EventEmitter();
 
-var mySession;
+var secret = cyborgConfig.secret_session;
 
-app.use(session({secret: 'secret2'}));
+var sessionMiddleware = session({
+    secret: secret
+});
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
@@ -27,41 +30,50 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use('/static', express.static(path.join(__dirname, 'static')))
 
-app.get('/', function (req, res) {
-  mySession = req.session;
+app.use(sessionMiddleware);
+// app.use(function (req, res, next) {
+//   var suid = req.query.suid;
+//
+//   // Si le suid du joueur est dans la liste des joueurs
+//   if(listPlayer.indexOf(suid) != -1){
+//     next();
+//   }else{
+//     res.send('deso')
+//   }
+// })
 
-  if(mySession.idJoueur){
-      var id = mySession.idJoueur;
-      res.render('menu', { idJoueur: id });
-  }else {
-    if(idJoueur >= nbJoueursMax){
-      res.send('deso')
-    }else{
-      mySession.idJoueur = ++idJoueur;
-      var id = mySession.idJoueur;
-      res.render('menu', { idJoueur: id });
-    }
-  }
-})
+app.get('/', function (req, res,next) {
+  req.session.suid = Number(req.query.suid);
+  next();
+});
 
-function hasIdJoueur(req,res,next) {
-  if(req.session){
+function idmiddleware (req, res, next) {
+  var suid = req.session.suid;
+
+  // Si le suid du joueur est dans la liste des joueurs
+  if(listPlayer.indexOf(suid) != -1){
     next();
-  }else {
-    res.send("DESO, je t'ai dis !!!");
+  }else{
+    res.send('deso')
   }
 }
 
-app.post('/choix',hasIdJoueur, function (req, res) {
-  var idJoueur = req.body.idJoueur;
+app.get('/',idmiddleware ,function (req, res) {
+  var suid = req.session.suid;
+  res.render('menu', { idJoueur: suid });
+});
+
+
+app.post('/choix',idmiddleware, function (req, res) {
+  var suid = req.session.suid;
   var choix = req.body.choix;
   if(!pfc.isOk()){
-      pfc.set(idJoueur,choix);
+      pfc.setChoix(suid,choix);
   }
   res.render('result');
 })
 
-app.get('/result',hasIdJoueur, function (req, res) {
+app.get('/result', idmiddleware, function (req, res) {
 
   res.writeHead(200, {
      'Connection': 'keep-alive',
@@ -79,15 +91,13 @@ app.get('/result',hasIdJoueur, function (req, res) {
      var winner = pfc.result();
      process.send({ state: "FINISH", winner : winner});
    }
-
 })
 
-// app.get('/resultFin', function (req, res) {
-//   res.send("Le gagnant est "+ pfc.result() );
-//
-// })
 
 app.listen(port, function () {
   console.log('Example app listening on port '+port)
-  process.send({ state: "READY"});
+  if(process.send){
+      process.send({ state: "READY"});
+  }
+
 })

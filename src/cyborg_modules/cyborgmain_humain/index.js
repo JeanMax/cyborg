@@ -1,15 +1,24 @@
-var port = Number(process.argv[2]);
+
 
 var express = require('express');
+var io      = require('socket.io');
+var path = require("path");
+var argv = require('minimist')(process.argv.slice(2));
+
+
 var app     = express();
+
+var port = argv.p;
+var listPlayer = argv._;
+var number_of_players = listPlayer.length; //TODO: do not hardcore, send param
+
 var server  = app.listen(port, function () {
   console.log('Example app listening on port '+port)
   process.send({ state: "READY"});
 });
-var io      = require('socket.io').listen(server);
+var sio      = io.listen(server);
 
-var path = require("path");
-var number_of_players = 3; //TODO: do not hardcore, send param
+
 
 // var staticFolder = path.join(__dirname, "./client/static");
 app.use("/static", express.static(path.join(__dirname, "/client/static")));
@@ -85,7 +94,7 @@ app.get("/",function (req,res,next) {
 //   // process.send({ state: "READY"});
 // })
 
-io.on("connection", function(socket){
+sio.on("connection", function(socket){
 
 	socket.on("init", function(msg){
 		if (!(socket.id in players)) {

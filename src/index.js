@@ -26,6 +26,7 @@ app.set('view engine', 'ejs')
 // On peut aussi mettre l'accés à une base de données
 // https://stackoverflow.com/questions/25532692/how-to-share-sessions-with-socket-io-1-x-and-express-4-x
 var secret = cyborgConfig.secret_session;
+console.log(secret)
 var sessionMiddleware = session({
     secret: secret
 });
@@ -46,6 +47,7 @@ app.get('/',function (req,res,next) {
   if(!req.session.suid){
     req.session.suid = ++suid;
   }
+  // On retourne la page de garde
   res.render('cyborg');
 });
 

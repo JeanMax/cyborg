@@ -22,15 +22,15 @@ const MAX_PORT = INIT_PORT + RANGE_PORT;
 
 var gamesProcess = [];
 
-function startGame(name,arraySessions,callback) {
+function startGame(name,suidList,callback) {
   _getPort(INIT_PORT,function (port,err) {
     if(err){
       throw err
     }
     var pathgame = path.join(PATH_CYB_MODS,name);
-    console.log(pathgame,name)
+    var args = ["-p",port].concat(suidList);
 
-    var child = child_process.fork(pathgame,[port]);
+    var child = child_process.fork(pathgame,args);
     var url = "http://"+ip+":"+port;
 
     // La fonction push renvoi la longueur de la liste et non la position
