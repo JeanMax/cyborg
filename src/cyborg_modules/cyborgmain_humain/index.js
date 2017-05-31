@@ -1,10 +1,14 @@
 var port = Number(process.argv[2]);
 
-var express = require("express");
-var app = express();
-var server = require("http").Server(app);
+var express = require('express');
+var app     = express();
+var server  = app.listen(port, function () {
+  console.log('Example app listening on port '+port)
+  process.send({ state: "READY"});
+});
+var io      = require('socket.io').listen(server);
+
 var path = require("path");
-var io = require("socket.io")(server);
 var number_of_players = 4; //TODO: do not hardcore, send param
 
 // var staticFolder = path.join(__dirname, "./client/static");
@@ -71,6 +75,16 @@ function check_results() {
 	results = {};
 }
 
+
+app.get("/",function (req,res,next) {
+    res.render("cyborgmain_humain");
+});
+
+// app.listen(port, function () {
+//   console.log('Example app listening on port '+port)
+//   // process.send({ state: "READY"});
+// })
+
 io.on("connection", function(socket){
 
 	socket.on("init", function(msg){
@@ -96,13 +110,3 @@ io.on("connection", function(socket){
 	});
 
 });
-
-
-app.get("/",function (req,res,next) {
-    res.render("cyborgmain_humain");
-});
-
-app.listen(port, function () {
-  console.log('Example app listening on port '+port)
-  process.send({ state: "READY"});
-})
