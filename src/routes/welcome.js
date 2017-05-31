@@ -19,12 +19,11 @@ router.get('/chooseGame',function (req,res,next) {
 });
 
 router.get('/new/:gameName',function (req,res,next) {
+    
     var gameName = req.params.gameName.toString().trim();
 
-    gameLib.startGame("pfc",[],function (idGame,url,child) {
+    gameLib.startGame(gameName,[],function (idGame,url,child) {
       var uriGame = url;
-
-
 
       res.render("waitforplayer",{
         title:gameName,

@@ -8,20 +8,20 @@ var router = express.Router()
 
 var gameLib = require('../lib/game_launcher.js');
 
-router.get('/new/:gameName',function (req,res,next) {
-    var gameName = req.params.gameName.toString().trim();
-
-
-
-    gameLib.startGame("pfc",[],function (idGame,url) {
-      var uriGame = url;
-      
-      res.render("waitforplayer",{
-        title:gameName,
-        uriGame: uriGame
-      });
-    })
-
-});
+// router.get('/new/:gameName',function (req,res,next) {
+//     var gameName = req.params.gameName.toString().trim();
+//
+//
+//
+//     gameLib.startGame("pfc",[],function (idGame,url) {
+//       var uriGame = url;
+//
+//       res.render("waitforplayer",{
+//         title:gameName,
+//         uriGame: uriGame
+//       });
+//     })
+//
+// });
 
 module.exports = router

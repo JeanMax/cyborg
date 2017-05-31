@@ -1,3 +1,5 @@
+var port = Number(process.argv[2]);
+
 var express = require("express");
 var app = express();
 var server = require("http").Server(app);
@@ -5,7 +7,8 @@ var path = require("path");
 var io = require("socket.io")(server);
 var number_of_players = 4; //TODO: do not hardcore, send param
 
-app.use("/static", express.static(path.join(__dirname, "./client/static")));
+// var staticFolder = path.join(__dirname, "./client/static");
+app.use("/static", express.static(path.join(__dirname, "/client/static")));
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/client"));
@@ -99,4 +102,7 @@ app.get("/",function (req,res,next) {
     res.render("cyborgmain_humain");
 });
 
-server.listen(4242);
+app.listen(port, function () {
+  console.log('Example app listening on port '+port)
+  process.send({ state: "READY"});
+})

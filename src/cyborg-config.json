@@ -2,11 +2,11 @@
   "games":[
     {
       "name":"Pierre Feuille Ciseaux",
-      "id":"pfc"
+      "id":"pierre_feuille_ciseaux"
     },
     {
       "name":"CyborgMain - HuMain",
-      "id":"cmhm"
+      "id":"cyborgmain_humain"
     }
   ],
   "main" : {

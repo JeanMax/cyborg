@@ -28,6 +28,7 @@ function startGame(name,arraySessions,callback) {
       throw err
     }
     var pathgame = path.join(PATH_CYB_MODS,name);
+    console.log(pathgame,name)
 
     var child = child_process.fork(pathgame,[port]);
     var url = "http://"+ip+":"+port;
