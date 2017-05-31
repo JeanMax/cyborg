@@ -26,7 +26,10 @@ router.get('/new/:gameName',function (req,res,next) {
 
     var gameName = req.params.gameName.toString().trim();
 
-    gameLib.startGame(gameName,[1,2,3],function (idGame,url,child) {
+    console.error("------------------------------------------")
+    console.error("ATTETION NOMBRE DE JOUEUR ECRIT EN DUR !!!")
+    console.error("------------------------------------------")
+    gameLib.startGame(gameName,[1,2],function (idGame,url,child) {
       var uriGame = url+"?suid="+req.session.suid;
 
       res.render("waitforplayer",{

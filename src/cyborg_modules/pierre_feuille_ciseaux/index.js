@@ -85,6 +85,8 @@ app.get('/result', idmiddleware, function (req, res) {
        res.write('data: ' + JSON.stringify({ msg : testdata }) + '\n\n');
    });
 
+   console.log(pfc.isOk())
+
    if(pfc.isOk()){
      eventEmitter.emit('result');
      var winner = pfc.result();
