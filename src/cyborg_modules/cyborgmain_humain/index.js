@@ -9,7 +9,7 @@ var server  = app.listen(port, function () {
 var io      = require('socket.io').listen(server);
 
 var path = require("path");
-var number_of_players = 4; //TODO: do not hardcore, send param
+var number_of_players = 3; //TODO: do not hardcore, send param
 
 // var staticFolder = path.join(__dirname, "./client/static");
 app.use("/static", express.static(path.join(__dirname, "/client/static")));
