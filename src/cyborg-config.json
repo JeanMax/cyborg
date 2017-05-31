@@ -3,6 +3,10 @@
     {
       "name":"Pierre Feuille Ciseaux",
       "id":"pfc"
+    },
+    {
+      "name":"CyborgMain - HuMain",
+      "id":"cmhm"
     }
   ],
   "main" : {
