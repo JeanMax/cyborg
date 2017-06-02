@@ -1,16 +1,16 @@
 {
-  "games":[
+  "games":
+  {
+    "pfc":
     {
-      "name":"Pierre Feuille Ciseaux",
-      "id":"pierre_feuille_ciseaux"
+      "name": "Pierre Feuille Ciseaux",
+      "path": "./pierre_feuille_ciseaux/index.js"
     },
+    "cyborgmain_humain" :
     {
-      "name":"CyborgMain - HuMain",
-      "id":"cyborgmain_humain"
+      "name": "CyborgMain - HuMain",
+      "path": "./cyborgmain_humain/index.js"
     }
-  ],
-  "main" : {
-      "name":"welcome"
-  },
-  "secret_session" : "cyborg"
+  }
+
 }

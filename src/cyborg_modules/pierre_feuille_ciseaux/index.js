@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const path = require('path')
 const express = require('express')
 const app = express()
@@ -16,10 +18,10 @@ pfc.setIds(listPlayer);
 
 var eventEmitter = new events.EventEmitter();
 
-var secret = cyborgConfig.secret_session;
+// var secret = cyborgConfig.secret_session;
 
 var sessionMiddleware = session({
-    secret: secret
+    secret: "cyborg"
 });
 
 app.set('views', path.join(__dirname, 'views'))

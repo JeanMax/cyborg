@@ -9,7 +9,16 @@ router.get('/home',function (req,res,next) {
 });
 
 router.get('/chooseGame',function (req,res,next) {
-  var allGames = req.app.get('config').games;
+  var games = req.app.get('config').games;
+  var allGames = [];
+  for (var id in games) {
+    var name = games[id].name;
+    allGames.push({
+      id : id,
+      name : name
+    })
+  }
+
   var instanceGames = gameLib.getGameInstances();
 
   for (instanceGame of instanceGames) {
@@ -25,18 +34,31 @@ router.get('/chooseGame',function (req,res,next) {
 router.get('/new/:gameName',function (req,res,next) {
 
     var gameName = req.params.gameName.toString().trim();
+    var games = req.app.get('config').games;
+
+    var game = games[gameName];
+    console.log(game);
 
     console.error("------------------------------------------")
-    console.error("ATTETION NOMBRE DE JOUEUR ECRIT EN DUR !!!")
+    console.error("ATTENTION NOMBRE DE JOUEUR ECRIT EN DUR !!!")
     console.error("------------------------------------------")
-    gameLib.startGame(gameName,[1,2],function (idGame,url,child) {
-      var uriGame = url+"?suid="+req.session.suid;
 
-      res.render("waitforplayer",{
-        title:gameName,
-        uriGame: uriGame
-      });
-    })
+    function onReady() {
+      function (idGame,url,child) {
+        var uriGame = url+"?suid="+req.session.suid;
+
+        res.render("waitforplayer",{
+          title:gameName,
+          uriGame: uriGame
+        });
+      }
+    }
+
+    function onFinish(err,result) {
+      console.error(err);
+      console.log(result);
+    }
+    gameLib.startGame(game.path,[1,2],[],onReadyonReadyonReady,onFinish)
 
 });
 

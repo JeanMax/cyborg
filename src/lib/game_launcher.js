@@ -22,36 +22,74 @@ const MAX_PORT = INIT_PORT + RANGE_PORT;
 
 var gamesProcess = [];
 
-function startGame(name,suidList,callback) {
+// Prend en entré le path du main, la liste des ids des joueurs (donc leur nombre) et un tableau de string qui sont les arguments à passé au script
+function startGame(pathMain,suidList,option = [],onReady,onFinish) {
+
+  // TODO géré le type d'entrée assert
   _getPort(INIT_PORT,function (port,err) {
     if(err){
       throw err
     }
-    var pathgame = path.join(PATH_CYB_MODS,name);
-    var args = ["-p",port].concat(suidList);
+    var pathgame = path.join(PATH_CYB_MODS,pathMain);
 
-    var child = child_process.fork(pathgame,args);
+    // Vérifiez q
+    var args = ["-p",port].concat(suidList).concat(option);
+
+    var child = child_process.spawn(pathgame,args,{ stdio: [0, 1, 2, 'ipc']});
+
+    // try {
+    //   child= child_process.spawn(pathgame,args);
+    //   console.log(child)
+    //   // TODO: Dans le système limité le nombre de forks
+    // } catch (e) {
+    //   //TODO re
+    //   console.error(e);
+    // } finally {
+    //
+    // }
+
     var url = "http://"+ip+":"+port;
 
     // La fonction push renvoi la longueur de la liste et non la position
     var length = gamesProcess.push({
       prog: child,
-      name : name,
+      name : pathMain,
       url : url
     });
 
+    var isResult = false;
 
-    child.on('message', (m) => {
-      if(m.state === "READY"){
-        callback(length - 1,url,child)
-      }
-    });
+    if(child)
+    {
+      child.on('message', (m) => {
+        if(m.state === "READY"){
+          onReady(length - 1,url,child)
+        }
+      });
 
-    child.on('message', (m) => {
-      if(m.state === "FINISH"){
+      child.on('message', (m) => {
+        if(m.state === "FINISH"){
+          onFinish(null,m.result);
+          isResult = true;
+        }
         stopGame(length - 1);
-      }
-    });
+      });
+
+      child.on('error', (err) => {
+        //TODO: mettre la valeur par défault
+        onFinish(err,[]);
+      });
+
+      child.on('exit', (code,signal) => {
+        console.error(code,signal);
+        if(!isResult){
+          onFinish(err,[]);
+        }
+
+      });
+    }
+
+
 
   })
 }
@@ -62,7 +100,7 @@ function stopGame(idGame) {
     child.kill("SIGKILL");
     gamesProcess.splice(idGame, 1);
   }
-}
+}        stopGame(length - 1);        stopGame(length - 1);        stopGame(length - 1);
 
 function getGameInstances() {
   return gamesProcess.map(function (g) {
