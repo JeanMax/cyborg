@@ -144,6 +144,11 @@
     $('#numberOfPlayer').html(val);
   });
 
+  socket.on('srcIframe', function (val) {
+    document.getElementById('mainFrame').src = "http://localhost:8080/welcome/home";
+  });
+
+
 
 
 

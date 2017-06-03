@@ -14,13 +14,10 @@ router.get('/setName',function (req,res,next) {
   var players = req.app.get('players');
 
   var suid = req.session.suid;
-  var socket = req.session.socket;
   var name = req.query.name;
 
-  players[suid] = {
-    name : name,
-    socket : socket
-  }
+  players[suid].name = name;
+
   res.redirect('games');
 })
 
@@ -72,7 +69,12 @@ router.get('/new/:gameName',function (req,res,next) {
 
     function onFinish(err,result) {
 
-      // var socketClient =
+      var players = req.app.get('players');
+      var keys = Object.keys(players);
+
+      for (key of keys) {
+          players[key].socket.emit("srcIframe",{data: "some random data"});
+      }
       //Je previens socket io de rediriger le iframe sur le jeu principaal
       console.error(err);
       console.log(result);

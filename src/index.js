@@ -44,14 +44,18 @@ app.use(sessionMiddleware);
 
 //access socket io in routes files
 app.set('sio', sio);
-app.set('players', []);
+app.set('players', {});
 
 
 //Template cyborg
 app.get('/',function (req,res,next) {
   // On assigne un suid à la première connection
   if(!req.session.suid){
-    req.session.suid = ++suid;
+    suid++;
+    var mySuid = suid;
+    var players = app.get('players');
+    req.session.suid = mySuid;
+    players[mySuid] = {};
   }
   // On retourne la page de garde
   res.render('cyborg');
@@ -78,7 +82,12 @@ server.listen(8080);
 
 
 sio.on('connection',function (socketClient) {
-  socketClient.request.socket =  socketClient;// Socket session in io
+  // console.log(socketClient.request.session)
+  var players = app.get('players');
+  var mySuid = socketClient.request.session.suid;
+
+  players[mySuid].socket = socketClient;
+
   sio.emit("numberOfPlayer",sio.engine.clientsCount)
 
   socketClient.on('newName', function (nom) {
