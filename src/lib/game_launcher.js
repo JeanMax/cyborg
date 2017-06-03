@@ -72,17 +72,18 @@ function startGame(pathMain,suidList,option = [],onReady,onFinish) {
           onFinish(null,m.result);
           isResult = true;
         }
-        stopGame(length - 1);
+        // stopGame(length - 1);
       });
 
       child.on('error', (err) => {
+        console.error(err);
         //TODO: mettre la valeur par défault
         onFinish(err,[]);
       });
 
       child.on('exit', (code,signal) => {
-        console.error(code,signal);
-        if(!isResult){
+
+        if(isResult){
           onFinish(err,[]);
         }
 
@@ -100,7 +101,7 @@ function stopGame(idGame) {
     child.kill("SIGKILL");
     gamesProcess.splice(idGame, 1);
   }
-}        stopGame(length - 1);        stopGame(length - 1);        stopGame(length - 1);
+}
 
 function getGameInstances() {
   return gamesProcess.map(function (g) {

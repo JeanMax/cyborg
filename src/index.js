@@ -9,6 +9,7 @@ const game = require('./routes/games');
 const settings = require('./routes/settings');
 const chat = require('./routes/chat');
 
+var joueurs = {};
 var suid = 0;
 
 // On accéde à config dans les autre fichiers routes grace à req.app.get('config')
@@ -38,7 +39,12 @@ sio.use(function(socket, next) {
 
 // Session dans les requetes
 app.use(sessionMiddleware);
+
 // <-- Session
+
+//access socket io in routes files
+app.set('sio', sio);
+app.set('players', []);
 
 
 //Template cyborg
@@ -72,7 +78,7 @@ server.listen(8080);
 
 
 sio.on('connection',function (socketClient) {
-  //socket.request.session // Socket session in io
+  socketClient.request.socket =  socketClient;// Socket session in io
   sio.emit("numberOfPlayer",sio.engine.clientsCount)
 
   socketClient.on('newName', function (nom) {

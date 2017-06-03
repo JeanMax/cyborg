@@ -28,12 +28,32 @@ game.result = function () {
     if( (game.joueurs[ids[0]] === "pierre" && game.joueurs[ids[1]] === "ciseaux")
      || (game.joueurs[ids[0]] === "feuille" && game.joueurs[ids[1]] === "pierre")
      || (game.joueurs[ids[0]] === "ciseaux" && game.joueurs[ids[1]] === "feuille")
-   ){ return ids[0]}
+   )
+   {
+    var result = {}
+     result[ids[0]] = 1;
+     result[ids[1]] = 0;
+
+     return result;
+   }
    else if ( (game.joueurs[ids[1]] === "pierre" && game.joueurs[ids[0]] === "ciseaux")
           || (game.joueurs[ids[1]] === "feuille" && game.joueurs[ids[0]] === "pierre")
           || (game.joueurs[ids[1]] === "ciseaux" && game.joueurs[ids[0]] === "feuille")
-   ) { return ids[1]}
-   else { return "Egalité"}
+   )
+   {
+     var result = {}
+     result[ids[0]] = 0;
+     result[ids[1]] = 1;
+
+     return result;
+   }
+   else {
+     var result = {}
+     result[ids[0]] = 0;
+     result[ids[0]] = 0;
+
+     return result;
+   }
   }
   else {
     return "Pas fini"

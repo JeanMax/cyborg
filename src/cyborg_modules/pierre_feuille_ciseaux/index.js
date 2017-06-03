@@ -83,16 +83,15 @@ app.get('/result', idmiddleware, function (req, res) {
    });
 
    eventEmitter.on('result', function () {
-       var testdata = pfc.result();
-       res.write('data: ' + JSON.stringify({ msg : testdata }) + '\n\n');
+       var result = pfc.result();
+       res.write('data: ' + JSON.stringify({ msg : result }) + '\n\n');
+       process.send({ state: "FINISH", result : result});
    });
 
-   console.log(pfc.isOk())
 
    if(pfc.isOk()){
      eventEmitter.emit('result');
      var winner = pfc.result();
-     process.send({ state: "FINISH", winner : winner});
    }
 })
 

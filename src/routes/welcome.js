@@ -8,7 +8,25 @@ router.get('/home',function (req,res,next) {
     res.render('welcome');
 });
 
-router.get('/chooseGame',function (req,res,next) {
+router.get('/setName',function (req,res,next) {
+
+  // On ajouter le player à la liste des players
+  var players = req.app.get('players');
+
+  var suid = req.session.suid;
+  var socket = req.session.socket;
+  var name = req.query.name;
+
+  players[suid] = {
+    name : name,
+    socket : socket
+  }
+  res.redirect('games');
+})
+
+router.get('/games',function (req,res,next) {
+
+  // On ajouter le player à la liste des players
   var games = req.app.get('config').games;
   var allGames = [];
   for (var id in games) {
@@ -37,28 +55,29 @@ router.get('/new/:gameName',function (req,res,next) {
     var games = req.app.get('config').games;
 
     var game = games[gameName];
-    console.log(game);
+
 
     console.error("------------------------------------------")
     console.error("ATTENTION NOMBRE DE JOUEUR ECRIT EN DUR !!!")
     console.error("------------------------------------------")
 
-    function onReady() {
-      function (idGame,url,child) {
+    function onReady(idGame,url,child) {
         var uriGame = url+"?suid="+req.session.suid;
 
         res.render("waitforplayer",{
           title:gameName,
           uriGame: uriGame
         });
-      }
     }
 
     function onFinish(err,result) {
+
+      // var socketClient =
+      //Je previens socket io de rediriger le iframe sur le jeu principaal
       console.error(err);
       console.log(result);
     }
-    gameLib.startGame(game.path,[1,2],[],onReadyonReadyonReady,onFinish)
+    gameLib.startGame(game.path,[1,2],[],onReady,onFinish)
 
 });
 
