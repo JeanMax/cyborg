@@ -72,9 +72,14 @@ router.get('/new/:gameName',function (req,res,next) {
       var players = req.app.get('players');
       var keys = Object.keys(players);
 
-      for (key of keys) {
-          players[key].socket.emit("srcIframe",{data: "some random data"});
-      }
+
+      setTimeout(function(){
+        for (key of keys) {
+            players[key].socket.emit("srcIframe",{result: result});
+        }
+      }, 3000);
+
+
       //Je previens socket io de rediriger le iframe sur le jeu principaal
       console.error(err);
       console.log(result);

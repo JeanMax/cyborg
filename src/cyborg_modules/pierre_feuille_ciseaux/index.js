@@ -84,7 +84,7 @@ app.get('/result', idmiddleware, function (req, res) {
 
    eventEmitter.on('result', function () {
        var result = pfc.result();
-       res.write('data: ' + JSON.stringify({ msg : result }) + '\n\n');
+       res.write('data: ' + JSON.stringify(result) + '\n\n');
        process.send({ state: "FINISH", result : result});
    });
 

@@ -39,6 +39,19 @@ sio.use(function(socket, next) {
 
 // Session dans les requetes
 app.use(sessionMiddleware);
+app.all('*',function (req,res,next) {
+  // On assigne un suid à la première connection
+  if(!req.session.suid){
+    suid++;
+    var mySuid = suid;
+    var players = app.get('players');
+    req.session.suid = mySuid;
+    players[mySuid] = {};
+    res.redirect('/');
+  }else {
+    next();
+  }
+})
 
 // <-- Session
 
@@ -49,14 +62,7 @@ app.set('players', {});
 
 //Template cyborg
 app.get('/',function (req,res,next) {
-  // On assigne un suid à la première connection
-  if(!req.session.suid){
-    suid++;
-    var mySuid = suid;
-    var players = app.get('players');
-    req.session.suid = mySuid;
-    players[mySuid] = {};
-  }
+
   // On retourne la page de garde
   res.render('cyborg');
 });
@@ -78,7 +84,7 @@ app.use("/settings",settings);
 app.use("/chat",chat);
 
 
-server.listen(8080);
+server.listen(80);
 
 
 sio.on('connection',function (socketClient) {
