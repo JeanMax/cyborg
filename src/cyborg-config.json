@@ -10,6 +10,11 @@
     {
       "name": "CyborgMain - HuMain",
       "path": "./cyborgmain_humain/index.js"
+    },
+    "baffe" :
+    {
+      "name": "Le Jeu de le Baffe",
+      "path": "./baffe/index.js"
     }
   }
 
