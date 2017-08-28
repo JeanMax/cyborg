@@ -2,15 +2,15 @@
 <html>
   <!--
   Page principale, les applications sont lancées dans un iFrame.
-  L'objectif et de garder une connection synchrone en utilisant socket.io. et éviter le rafraichissement et donc la deconnection de l'utilisateur.
+  L objectif et de garder une connection synchrone en utilisant socket.io. et éviter le rafraichissement et donc la deconnection de l'utilisateur.
   -->
   <head>
     <meta charset="utf-8">
 
 
-    <link rel="stylesheet" href="static/css/normalize.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="/static/css/normalize.css" media="screen" title="no title" charset="utf-8">
 
-    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/pure-min.css">
 
     <!-- Recommendation purecss -->
     <!-- The viewport meta element lets you control the the width and scale of the viewport on mobile browsers. Since you're building a responsive website, you want the width to be equal to the device's native width. Add this into your page's <head>.--->
@@ -22,8 +22,8 @@
     <link rel="stylesheet" href="static/css/cyborg.css" media="screen" title="no title" charset="utf-8">
 
     <!-- Dépendances js -->
-    <script src="static/js/socket.io.js" charset="utf-8"></script>
-    <script src="static/js/jquery-3.2.1.js" charset="utf-8"></script>
+    <script src="/static/js/socket.io.js" charset="utf-8"></script>
+    <script src="/static/js/jquery-3.2.1.js" charset="utf-8"></script>
 
 
     <title>Cyborg - Platform</title>
@@ -86,15 +86,15 @@
 
   //API Client cyborg
   cyborg = {};
-  cyborg.socket = io();
+  var socket = io();
   cyborg.isFullScreen = false;
   cyborg.changeName = function (name) {
 
     if(!cyborg.name){
-      cyborg.socket.emit('newName', name);
+      socket.emit('newName', name);
     }else{
       var oldName = cyborg.name;
-      cyborg.socket.emit('changeName', {old:oldName , new:name });
+      socket.emit('changeName', {old:oldName , new:name });
     }
     cyborg.name = name;
 
@@ -136,13 +136,18 @@
   * Gestion du temps réel
   *
   */
-  cyborg.socket.on('annonce', function (val) {
+  socket.on('annonce', function (val) {
     cyborg.annonce(val);
   });
 
-  cyborg.socket.on('numberOfPlayer', function (val) {
+  socket.on('numberOfPlayer', function (val) {
     $('#numberOfPlayer').html(val);
   });
+
+  socket.on('srcIframe', function (result) {
+    document.getElementById('mainFrame').src = "/welcome/home";
+  });
+
 
 
 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<!-- Ressource partagé à toute les applis ! Rajouté un / devant l'url -->
+		<script src="/static/js/jquery-3.2.1.js" charset="utf-8"></script>
+		<script src="/static/js/socket.io.js"></script>
+
+		<!-- Ressource appartenant à l'appli  -->
+		<!-- <link rel="stylesheet" href="/static/css/tchoytchoy.css" media="screen" title="no title" charset="utf-8"> -->
+
+		<title>CyborgMain - HuMain</title>
+	</head>
+
+	<body>
+		<h1 id="status"></h1>
+		<img onclick='send_results("cyborgmain")' src="static/cyborgmain.png" style="width:240px;height:240px;">
+		<img onclick='send_results("humain")' src="static/humain.png" style="width:240px;height:240px;">
+	</body>
+
+	<script>
+	 var socket = io();
+	 var status = "play"; // play/wait/win
+
+	 socket.emit("init", 42);
+	 document.getElementById("status").innerHTML = "Cliquez sur une main";
+
+	 function send_results(result) {
+		 socket.emit("result", result);
+	 }
+
+	 socket.on("status_update", function(msg) {
+		 var str;
+
+		 switch (msg) {
+			 case "win":
+				 str = "Vous avez gagné!";
+				 break;
+			 case "loose":
+				 str = "Vous avez perdu!";
+				 break;
+			 case "wait":
+				 str = "En attente des autres joueurs...";
+				 break;
+			 default:
+				 str = "Cliquez sur une main";
+		 }
+		 document.getElementById("status").innerHTML = str;
+	 });
+	</script>
+</html>

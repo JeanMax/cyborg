@@ -1,64 +1,147 @@
-var express = require('express')
-var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-var http = require('http');
+const express = require('express');
+const app = express();
+const server = require('http').Server(app);
+const sio = require('socket.io')(server);
+const session = require("express-session");
 
-var httpProxy = require('http-proxy');
+const welcome = require('./routes/welcome');
+const game = require('./routes/games');
+const settings = require('./routes/settings');
+const chat = require('./routes/chat');
+
+var port = require('minimist')(process.argv)["_"][2] || 80;  // alternative port
+
+var joueurs = {};
+var suid = 0;
+
+// On accéde à config dans les autre fichiers routes grace à req.app.get('config')
 var cyborgConfig = require('./cyborg-config.json');
-var welcome = require('./cyborg_modules/'+cyborgConfig.main.name);
-var port = 3000;
+app.set('config', cyborgConfig);
 
-var apiProxy = httpProxy.createProxyServer({ws:true});
-cyborgConfig.main.port = port;
-welcome.start(cyborgConfig.main.port);
+// Repertoire contenant les vues, ainsi que les assets clients accessible par tous.
+app.set('views', __dirname + '/client/views');
+app.use('/static', express.static('client/static/'));
 
+// Utilisation du moteur de rendu ejs
+app.set('view engine', 'ejs');
 
-app.set('views', __dirname+'/client');
-app.use('/static',express.static('client/static/'));
+// Session -->
+// On peut aussi mettre l'accés à une base de données
+// https://stackoverflow.com/questions/25532692/how-to-share-sessions-with-socket-io-1-x-and-express-4-x
+// var secret = cyborgConfig.secret_session;
 
-app.get('/',function (req,res,next) {
-  res.sendFile(__dirname+'/client/cyborg.html');
+var sessionMiddleware = session({
+    secret: "cyborg",
+    resave: true,    // cf. https://github.com/expressjs/session/issues/56
+    saveUninitialized: true // idem
 });
 
-app.all("/"+cyborgConfig.main.name+"/*", function(req, res){
-  req.url = req.url.replace("/"+cyborgConfig.main.name, "");
-  apiProxy.web(req, res, { target: "http://localhost:"+cyborgConfig.main.port+"/" });
+// Session dans les sockets
+sio.use(function(socket, next) {
+    sessionMiddleware(socket.request, socket.request.res, next);
 });
 
-server.listen(8080);
+// Session dans les requetes
+app.use(sessionMiddleware);
+app.all('*', function (req, res, next) {
+  // On assigne un suid à la première connection
+  if (!req.session.suid){
+    suid++;
+    var mySuid = suid;
+    var players = app.get('players');
+    req.session.suid = mySuid;
+    players[mySuid] = {};
+    res.redirect('/');
+  } else {
+    next();
+  }
+});
 
-//
-io.on('connection',function (socketClient) {
-  io.emit("numberOfPlayer",io.engine.clientsCount)
-  //console.log("Un nouveau joueur s'est connecté :)");
+// <-- Session
+
+//access socket io in routes files
+app.set('sio', sio);
+app.set('players', {});
+
+
+//Template cyborg
+app.get('/', function (req, res, next) {
+
+  // On retourne la page de garde
+  res.render('cyborg');
+});
+
+//Welcome route
+//Create or access your profil, select a game, wait for game begin
+app.use("/welcome", welcome);
+
+//games route
+//Start, Kill, Pause, Save game
+app.use("/game", game);
+
+//games route
+//Config your reachable peripheral devices, ex: volume of sound, connected devices, ect...
+app.use("/settings", settings);
+
+//chat route
+//Chat with other players, games can settings chat rooms
+app.use("/chat", chat);
+
+
+server.listen(port);
+
+
+sio.on('connection', function (socketClient) {
+  // console.log(socketClient.request.session)
+  var players = app.get('players');
+  var mySuid = socketClient.request.session.suid;
+
+  players[mySuid].socket = socketClient;
+
+  sio.emit("numberOfPlayer", sio.engine.clientsCount);
 
   socketClient.on('newName', function (nom) {
     socketClient.broadcast.emit('annonce', nom + " est connecté");
   });
 
   socketClient.on('changeName', function (nameObj) {
-    socketClient.broadcast.emit('annonce',nameObj.old + " a changé son nom en "+ nameObj.new);
+    socketClient.broadcast.emit('annonce', nameObj.old + " a changé son nom en " + nameObj.new);
   });
-
 
   socketClient.on('disconnect', function () {
     socketClient.broadcast.emit("Un joueur s'est déconnecté :(");
-    io.emit("numberOfPlayer",io.engine.clientsCount)
+    sio.emit("numberOfPlayer", sio.engine.clientsCount);
   });
 });
 
-// app.get('/welcome',function (req,res,next) {
-//   res.sendFile(__dirname+'/client/welcome.html');
+
+//Lancement d'un nouveau jeu
+/*
+* Redirection vers le jeu ayant l'id gameId
+*/
+// app.all("/game/:gameId/*", function(req, res){
+//   // req.url = req.url.replace("/game", "");
+//   // var urlTarget = "http://localhost:" + cyborgConfig.port + "/";
+//   // apiProxy.web(req, res, { target: urlTarget });
+// });
+
+// app.all("/game/*", function(req, res){
+//   req.url = req.url.replace("/game", "");
+//   var urlTarget = "http://localhost:" + cyborgConfig.port + "/";
+//   apiProxy.web(req, res, { target: urlTarget });
+// });
+
+// app.get('/welcome', function (req, res, next) {
+//   res.sendFile(__dirname + '/client/welcome.html');
 // });
 //
-// app.get('/chooseGame',function (req,res,next) {
+// app.get('/chooseGame', function (req, res, next) {
 //
 //   var games = AllGames.games;
-//   res.render('chooseGame',{games:games});
+//   res.render('chooseGame', {games:games});
 // });
 //
-// app.get('/newGame',function (req,res,next) {
+// app.get('/newGame', function (req, res, next) {
 //   // TODO Refaire :)
 //   var idGame = req.query.name.toString().trim();
 //   var picked = AllGames.games.find(function (game) {
@@ -66,22 +149,22 @@ io.on('connection',function (socketClient) {
 //   });
 //   var gameName = picked.name;
 //
-//   res.render("waitforplayer",{title:gameName})
+//   res.render("waitforplayer", {title:gameName})
 // });
 
-// app.get('/chooseGame',function (req,res,next) {
+// app.get('/chooseGame', function (req, res, next) {
 //   console.log(games);
-//   res.sendFile(__dirname+'/client/chooseGame.html');
+//   res.sendFile(__dirname + '/client/chooseGame.html');
 // });
 
 
 
-// app.use('/*',function (req,res,next) {
-//   res.sendFile(__dirname+'/client/'+'index.html');
+// app.use('/*', function (req, res, next) {
+//   res.sendFile(__dirname + '/client/' + 'index.html');
 // });
 
 
-// app.post('/changeName',function (req,res,next) {
+// app.post('/changeName', function (req, res, next) {
 //   var newPlayerName = req.body.cyborgPlayerName;
 //
 //   //Si l'utilisateur n'est pas encore indexé sur la platform
@@ -100,7 +183,7 @@ io.on('connection',function (socketClient) {
 //
 // });
 //
-// app.post('/chooseGame',function (req,res,next) {
+// app.post('/chooseGame', function (req, res, next) {
 //   var newPlayerGame = req.body.cyborgPlayerGame;
 //   var playerName = req.session.cyborgPlayerName;
 //   var joueur = platform.recupererJoueur(playerName);
@@ -117,7 +200,7 @@ io.on('connection',function (socketClient) {
 // });
 //
 //
-// app.use('/',function (req,res,next) {
+// app.use('/', function (req, res, next) {
 //
 //   var cyborgPlayerName = req.session.cyborgPlayerName;
 //   var cyborgPlayerGame = req.session.cyborgPlayerGame;
