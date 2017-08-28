@@ -1,0 +1,29 @@
+body {
+	text-align: center;
+}
+
+/* #status {} */
+/* #info {} */
+
+#players {
+	margin: auto;
+	width: 90%;
+}
+
+.player {
+	padding: 0.5em;
+	margin: 1em;
+	border-style: solid;
+}
+
+.baffe, .soin {
+	margin: 1em;
+}
+
+.baffe {
+    color: red;
+}
+
+.soin {
+    color: green;
+}

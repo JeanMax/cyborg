@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 const sio = require('socket.io')(server);
@@ -9,6 +9,8 @@ const game = require('./routes/games');
 const settings = require('./routes/settings');
 const chat = require('./routes/chat');
 
+var port = require('minimist')(process.argv)["_"][2] || 80;  // alternative port
+
 var joueurs = {};
 var suid = 0;
 
@@ -17,11 +19,11 @@ var cyborgConfig = require('./cyborg-config.json');
 app.set('config', cyborgConfig);
 
 // Repertoire contenant les vues, ainsi que les assets clients accessible par tous.
-app.set('views', __dirname+'/client/views');
-app.use('/static',express.static('client/static/'));
+app.set('views', __dirname + '/client/views');
+app.use('/static', express.static('client/static/'));
 
 // Utilisation du moteur de rendu ejs
-app.set('view engine', 'ejs')
+app.set('view engine', 'ejs');
 
 // Session -->
 // On peut aussi mettre l'accés à une base de données
@@ -29,7 +31,9 @@ app.set('view engine', 'ejs')
 // var secret = cyborgConfig.secret_session;
 
 var sessionMiddleware = session({
-    secret: "cyborg"
+    secret: "cyborg",
+    resave: true,    // cf. https://github.com/expressjs/session/issues/56
+    saveUninitialized: true // idem
 });
 
 // Session dans les sockets
@@ -39,19 +43,19 @@ sio.use(function(socket, next) {
 
 // Session dans les requetes
 app.use(sessionMiddleware);
-app.all('*',function (req,res,next) {
+app.all('*', function (req, res, next) {
   // On assigne un suid à la première connection
-  if(!req.session.suid){
+  if (!req.session.suid){
     suid++;
     var mySuid = suid;
     var players = app.get('players');
     req.session.suid = mySuid;
     players[mySuid] = {};
     res.redirect('/');
-  }else {
+  } else {
     next();
   }
-})
+});
 
 // <-- Session
 
@@ -61,7 +65,7 @@ app.set('players', {});
 
 
 //Template cyborg
-app.get('/',function (req,res,next) {
+app.get('/', function (req, res, next) {
 
   // On retourne la page de garde
   res.render('cyborg');
@@ -69,44 +73,44 @@ app.get('/',function (req,res,next) {
 
 //Welcome route
 //Create or access your profil, select a game, wait for game begin
-app.use("/welcome",welcome);
+app.use("/welcome", welcome);
 
 //games route
 //Start, Kill, Pause, Save game
-app.use("/game",game);
+app.use("/game", game);
 
 //games route
 //Config your reachable peripheral devices, ex: volume of sound, connected devices, ect...
-app.use("/settings",settings);
+app.use("/settings", settings);
 
 //chat route
 //Chat with other players, games can settings chat rooms
-app.use("/chat",chat);
+app.use("/chat", chat);
 
 
-server.listen(80);
+server.listen(port);
 
 
-sio.on('connection',function (socketClient) {
+sio.on('connection', function (socketClient) {
   // console.log(socketClient.request.session)
   var players = app.get('players');
   var mySuid = socketClient.request.session.suid;
 
   players[mySuid].socket = socketClient;
 
-  sio.emit("numberOfPlayer",sio.engine.clientsCount)
+  sio.emit("numberOfPlayer", sio.engine.clientsCount);
 
   socketClient.on('newName', function (nom) {
     socketClient.broadcast.emit('annonce', nom + " est connecté");
   });
 
   socketClient.on('changeName', function (nameObj) {
-    socketClient.broadcast.emit('annonce',nameObj.old + " a changé son nom en "+ nameObj.new);
+    socketClient.broadcast.emit('annonce', nameObj.old + " a changé son nom en " + nameObj.new);
   });
 
   socketClient.on('disconnect', function () {
     socketClient.broadcast.emit("Un joueur s'est déconnecté :(");
-    sio.emit("numberOfPlayer",sio.engine.clientsCount)
+    sio.emit("numberOfPlayer", sio.engine.clientsCount);
   });
 });
 
@@ -117,27 +121,27 @@ sio.on('connection',function (socketClient) {
 */
 // app.all("/game/:gameId/*", function(req, res){
 //   // req.url = req.url.replace("/game", "");
-//   // var urlTarget = "http://localhost:"+cyborgConfig.port+"/";
+//   // var urlTarget = "http://localhost:" + cyborgConfig.port + "/";
 //   // apiProxy.web(req, res, { target: urlTarget });
 // });
 
 // app.all("/game/*", function(req, res){
 //   req.url = req.url.replace("/game", "");
-//   var urlTarget = "http://localhost:"+cyborgConfig.port+"/";
+//   var urlTarget = "http://localhost:" + cyborgConfig.port + "/";
 //   apiProxy.web(req, res, { target: urlTarget });
 // });
 
-// app.get('/welcome',function (req,res,next) {
-//   res.sendFile(__dirname+'/client/welcome.html');
+// app.get('/welcome', function (req, res, next) {
+//   res.sendFile(__dirname + '/client/welcome.html');
 // });
 //
-// app.get('/chooseGame',function (req,res,next) {
+// app.get('/chooseGame', function (req, res, next) {
 //
 //   var games = AllGames.games;
-//   res.render('chooseGame',{games:games});
+//   res.render('chooseGame', {games:games});
 // });
 //
-// app.get('/newGame',function (req,res,next) {
+// app.get('/newGame', function (req, res, next) {
 //   // TODO Refaire :)
 //   var idGame = req.query.name.toString().trim();
 //   var picked = AllGames.games.find(function (game) {
@@ -145,22 +149,22 @@ sio.on('connection',function (socketClient) {
 //   });
 //   var gameName = picked.name;
 //
-//   res.render("waitforplayer",{title:gameName})
+//   res.render("waitforplayer", {title:gameName})
 // });
 
-// app.get('/chooseGame',function (req,res,next) {
+// app.get('/chooseGame', function (req, res, next) {
 //   console.log(games);
-//   res.sendFile(__dirname+'/client/chooseGame.html');
+//   res.sendFile(__dirname + '/client/chooseGame.html');
 // });
 
 
 
-// app.use('/*',function (req,res,next) {
-//   res.sendFile(__dirname+'/client/'+'index.html');
+// app.use('/*', function (req, res, next) {
+//   res.sendFile(__dirname + '/client/' + 'index.html');
 // });
 
 
-// app.post('/changeName',function (req,res,next) {
+// app.post('/changeName', function (req, res, next) {
 //   var newPlayerName = req.body.cyborgPlayerName;
 //
 //   //Si l'utilisateur n'est pas encore indexé sur la platform
@@ -179,7 +183,7 @@ sio.on('connection',function (socketClient) {
 //
 // });
 //
-// app.post('/chooseGame',function (req,res,next) {
+// app.post('/chooseGame', function (req, res, next) {
 //   var newPlayerGame = req.body.cyborgPlayerGame;
 //   var playerName = req.session.cyborgPlayerName;
 //   var joueur = platform.recupererJoueur(playerName);
@@ -196,7 +200,7 @@ sio.on('connection',function (socketClient) {
 // });
 //
 //
-// app.use('/',function (req,res,next) {
+// app.use('/', function (req, res, next) {
 //
 //   var cyborgPlayerName = req.session.cyborgPlayerName;
 //   var cyborgPlayerGame = req.session.cyborgPlayerGame;
