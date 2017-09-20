@@ -5,9 +5,9 @@
 const express = require('express');
 const http = require('http');
 const socket = require('socket.io');
-const $ = require("jquery");
+// const $ = require("jquery");
 const path = require('path')
-var game = require('./js/pile_face.js');
+var game = require('./client/static/js/pile_face.js');
 var argv = require('minimist')(process.argv.slice(2));
 game = new game();
 
@@ -25,7 +25,8 @@ const server = http.Server(app);
 // Socket
 const io = socket.listen(server);
 
-app.use('/jquery', express.static(__dirname + '/js/'));
+// app.use('/jquery', express.static(__dirname + '/js/'))
+app.use("/static", express.static(path.join(__dirname, "/client/static")));;
 app.set('views', path.join(__dirname, 'views'))
 
 

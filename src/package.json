@@ -22,7 +22,8 @@
     "express-session": "^1.15.3",
     "http-proxy": "^1.16.2",
     "ip": "^1.1.5",
-    "socket.io": "^1.7.3"
+    "socket.io": "^1.7.3",
+	"get-folder-size":"^1.0.0"
   },
   "devDependencies": {
     "forever": "^0.15.3"
