@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>upload_dir</title>
+	</head>
+
+	<body>
+		<div id='InfosUpload'>
+			<span>
+				<p>A file, load.json must be a the top level folder.</p>
+				<p>cat load.json </br>
+				<pre>
+{
+	"config":
+	{
+		"name":	"name of the game",
+		"main":	"theNameOfTheMainFile" //ex: "index.js" or "src/index.js"
+	}
+}
+				</pre>
+				</p>
+				<p>
+					Il doivent fournir une commande de lancement qui prend en parametre un numero de port qui leur sera fourni.
+				</p>
+				<p>The function "process.send({state:"READY"});"
+					must be add in the callback of the function "server.listen"</br>
+					ex: </br>
+					<pre>
+server.listen(PORT, function () {
+	process.send({state:"READY"});
+})
+					</pre>
+				</p>
+			</span>
+		</div>
+		<div id="UploadBox">
+			<span id='UploadAreaForm'>
+				<label for="FileBox">Choose A folder: </label><input type="file" id="FileBox" webkitdirectory directory multiple><br>
+				<label for="NameBox">Name: </label><input type="text" id="NameBox"><br>
+
+				<button  type='button' id='UploadButton' class='Button'>Upload</button>
+			</span>
+			<span id='UploadArea'>
+			</span>
+		</div>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/jquery/jquery-3.2.1.min.js"></script>
+
+	<script>
+
+		window.addEventListener("load", Ready);
+
+		const socket = io();
+
+		var SelectedFile = null;
+		var SelectedFiles = null;
+		var FReader = null;
+		var Name = null;
+		var i = 0;
+		var len = null;
+		function Ready(){
+			if(window.File && window.FileReader){ //These are the relevant HTML5 objects that we are going to use
+				document.getElementById('UploadButton').addEventListener('click', init);
+				document.getElementById('FileBox').addEventListener('change', FileChosen);
+				document.getElementById('FileBox').addEventListener('click', FileChosen);
+			}
+			else
+			{
+				document.getElementById('UploadArea').innerHTML = "Your Browser Doesn't Support The File API Please Update Your Browser";
+			}
+
+			function FileChosen(evnt) {
+
+				SelectedFiles = evnt.target.files;
+				if (!SelectedFiles || !SelectedFiles.length) {
+					return;
+				}
+				i = 0;
+				len = SelectedFiles.length;
+				let dir = evnt.target.files[0].webkitRelativePath.split('/');
+
+				document.getElementById('NameBox').value = dir[0];
+				// document.getElementById('NameBox').value = evnt.target.files[0].name;
+			}
+		}
+		function init() {
+			let selected = SelectedFiles[i]
+			let name = selected.webkitRelativePath
+			socket.emit('init', {'Name': name});
+		}
+		function initStart() {
+			socket.emit('initStart');
+		}
+
+		function StartUpload(){
+			if(i || document.getElementById('FileBox').value != "")
+			{
+				SelectedFile = SelectedFiles[i]
+				FReader = new FileReader();
+				Name = SelectedFile.webkitRelativePath;
+
+				var Content = '<div id="ProgressContainer"><div id="ProgressBar"></div></div><span id="percent">0%</span>';
+				Content += "<span id='Uploaded'> - <span id='MB'>0</span>/" + Math.round(SelectedFile.size / 1048576) + "MB</span>";
+				document.getElementById('UploadArea').innerHTML = Content;
+
+				FReader.onload = function(evnt){
+					socket.emit('Upload', { 'Name' : Name, Data : evnt.target.result });
+				}
+				socket.emit('Start', { 'Name' : Name, 'Size' : SelectedFile.size });
+			}
+			else
+			{
+				alert("Please Select A File");
+			}
+		}
+
+		socket.on('initOk', function() {
+			StartUpload();
+		});
+
+		socket.on('MoreFiles', function() {
+			i++;
+			if (i < len){
+				StartUpload();
+			}
+			else {
+				socket.emit('initStart');
+				FReader = null;
+				delete FReader
+				document.getElementById('UploadArea').innerHTML = '';
+			}
+		})
+
+		socket.on('MoreData', function (data){
+			UpdateBar(data['Percent']);
+			var Place = data['Place'] * 524288; //The Next Blocks Starting Position
+			var NewFile = null; //The Variable that will hold the new Block of Data
+			if(SelectedFile.webkitSlice)
+				NewFile = SelectedFile.webkitSlice(Place, Place + Math.min(524288, (SelectedFile.size-Place)));
+			else
+				NewFile = SelectedFile.slice(Place, Place + Math.min(524288, (SelectedFile.size-Place)));
+			if (data['File_name'] == 'load.json') {
+
+				FReader.readAsText(NewFile);
+			}
+			else {
+				FReader.readAsBinaryString(NewFile);
+			}
+			// if ((FReader.readyState == 0 || FReader.readyState == 2) && NewFile) {
+			// 	console.log('FRrBis: ', FReader.readyState);
+			//
+			// 	FReader.readAsText(NewFile);
+			// }
+		});
+
+		socket.on('FinishDownload', function (data) {
+			UpdateBar(data['Percent']);
+
+			let content = "<span >";
+			content += "<label for='FileBox'>Choose A folder: </label>";
+			content += "<input type='file' id='FileBox' webkitdirectory directory multiple><br>";
+			content += "<label for='NameBox'>Name: </label><input type='text' id='NameBox'><br>";
+			content += "<button  type='button' id='UploadButton' class='Button'>Upload</button>";
+			content += "</span>";
+			document.getElementById('UploadAreaForm').innerHTML = content;
+			Ready();
+		})
+		function UpdateBar(percent){
+			document.getElementById('ProgressBar').style.width = percent + '%';
+			document.getElementById('percent').innerHTML = (Math.round(percent*100)/100) + '%';
+			var MBDone = Math.round(((percent/100.0) * SelectedFile.size) / 1048576);
+			document.getElementById('MB').innerHTML = MBDone;
+		}
+
+	</script>
+
+	</body>
+</html>

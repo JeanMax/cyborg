@@ -1,0 +1,7 @@
+{
+	"config":
+	{
+		"name":	"Le jeu de la paille",
+		"main":	"index.js"
+	}
+}

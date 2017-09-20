@@ -1,0 +1,7 @@
+{
+	"config":
+	{
+		"name":	"Le Jeu de le Baffe",
+		"main":	"index.js"
+	}
+}

@@ -8,6 +8,7 @@ const welcome = require('./routes/welcome');
 const game = require('./routes/games');
 const settings = require('./routes/settings');
 const chat = require('./routes/chat');
+const upload = require('./routes/upload');
 
 var port = require('minimist')(process.argv)["_"][2] || 80;  // alternative port
 
@@ -87,7 +88,9 @@ app.use("/settings", settings);
 //Chat with other players, games can settings chat rooms
 app.use("/chat", chat);
 
-
+//upload route
+//Add new games
+app.use("/upload", upload);
 server.listen(port);
 
 
@@ -95,8 +98,12 @@ sio.on('connection', function (socketClient) {
   // console.log(socketClient.request.session)
   var players = app.get('players');
   var mySuid = socketClient.request.session.suid;
-
-  players[mySuid].socket = socketClient;
+  if (players[mySuid]) {
+	  players[mySuid].socket = socketClient;
+  }
+  else {
+  	return ;
+  }
 
   sio.emit("numberOfPlayer", sio.engine.clientsCount);
 

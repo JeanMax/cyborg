@@ -1,0 +1,7 @@
+{
+	"config":
+	{
+		"name":	"CyborgMain - HuMain",
+		"main":	"index.js"
+	}
+}

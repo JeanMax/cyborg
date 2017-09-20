@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Pile ou face</title>
+    </head>
+
+    <body>
+		<div>
+			<span>Your Score: </span>
+			<span id='your_score'>0</span>
+		</div>
+		<div>
+			<span>Adversaire Score: </span>
+			<span id='adversaire_score'>0</span>
+		</div>
+
+
+       <p><input type="button" value="Pile" id="pile" /></p>
+       <p><input type="button" value="Face" id="face" /></p>
+
+
+      <script src="/socket.io/socket.io.js"></script>
+      <script src="/jquery/jquery-3.2.1.min.js"></script>
+
+      <script>
+
+        const socket = io();
+
+		socket.on('message', function(message) {
+			alert(message);
+		})
+
+          socket.on('your_score', function(score) {
+			  $('#your_score').html('<span>'+score+'</span>');
+          })
+          socket.on('adversaire_score', function(score) {
+			  $('#adversaire_score').html('<span>'+score+'</span>');
+          })
+
+          $('#pile').click(function () {
+              socket.emit('choice', 'pile');
+          })
+          $('#face').click(function () {
+              socket.emit('choice', 'face');
+          })
+      </script>
+
+    </body>
+</html>

@@ -1,0 +1,7 @@
+{
+	"config":
+	{
+		"name":	"PileOrFace",
+		"main":	"index.js"
+	}
+}
