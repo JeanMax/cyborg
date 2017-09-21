@@ -53,7 +53,6 @@ router.get('/new/:gameName',function (req,res,next) {
 
     var game = games[gameName];
 
-
     console.error("------------------------------------------")
     console.error("ATTENTION NOMBRE DE JOUEUR ECRIT EN DUR !!!")
     console.error("------------------------------------------")

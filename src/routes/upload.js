@@ -39,17 +39,14 @@ function addGame(dir_name, path_file, data) {
 	}
 	newGame = newGame.config;
 
-
-	let config_game = readFile(CONFIG_FILE);
+	let config_game = reqApp.get('config');
 
 	if (config_game) {
-
 		config_game.games[dir_name] = {};
 		config_game.games[dir_name].name = newGame.name;
 		config_game.games[dir_name].path = './'+dir_name +'/'+ newGame.main;
 		fs.writeFile(CONFIG_FILE, JSON.stringify(config_game), function (err) {
 			if (err) return console.log(err);
-			// var cyborgConfig = require('./cyborg-config.json');
 			reqApp.set('config', config_game);
 		});
 	}
@@ -181,7 +178,7 @@ router.all('*',function (req,res,next) {
 						console.log(err);
 					}
 
-					// fs.close(Files[Name]['Handler']);
+					fs.close(Files[Name]['Handler']);
 					let file_path = './'+ CYBORG_MODULES_PATH + Name;
 					let arr_name = data['Name'].split('/');
 					let dir_name = arr_name[0];

@@ -7,6 +7,7 @@
 
 exports.startGame = startGame;
 exports.stopGame = stopGame;
+exports.getIdGame = getIdGame;
 exports.getGameInstances = getGameInstances;
 
 
@@ -35,7 +36,7 @@ function startGame(pathMain,suidList,option = [],onReady,onFinish) {
     // Vérifiez q
     var args = ["-p",port].concat(suidList).concat(option);
 
-    var child = child_process.spawn(pathgame,args,{ stdio: [0, 1, 2, 'ipc']});
+	var child = child_process.spawn(pathgame,args,{ stdio: [0, 1, 2, 'ipc']});
 
     // try {
     //   child= child_process.spawn(pathgame,args);
@@ -93,6 +94,15 @@ function startGame(pathMain,suidList,option = [],onReady,onFinish) {
 
 
   })
+}
+
+function getIdGame(nameGame) {
+	for (let i = 0; i < gamesProcess.length; i++) {
+		if (gamesProcess[i].name == nameGame) {
+			return (i);
+		}
+	}
+	return (-1);
 }
 
 function stopGame(idGame) {

@@ -46,7 +46,8 @@ server.listen(PORT, function () {
 		</div>
 
 	<script src="/socket.io/socket.io.js"></script>
-	<script src="/jquery/jquery-3.2.1.min.js"></script>
+	<!-- Ressource partagé à toute les applis ! Rajouté un / devant l'url -->
+	<script src="/static/js/jquery-3.2.1.js" charset="utf-8"></script>
 
 	<script>
 
@@ -82,7 +83,6 @@ server.listen(PORT, function () {
 				let dir = evnt.target.files[0].webkitRelativePath.split('/');
 
 				document.getElementById('NameBox').value = dir[0];
-				// document.getElementById('NameBox').value = evnt.target.files[0].name;
 			}
 		}
 		function init() {
