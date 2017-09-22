@@ -9,6 +9,7 @@ const game = require('./routes/games');
 const settings = require('./routes/settings');
 const chat = require('./routes/chat');
 const upload = require('./routes/upload');
+const deleteGame = require('./routes/delete');
 
 var port = require('minimist')(process.argv)["_"][2] || 80;  // alternative port
 
@@ -89,8 +90,13 @@ app.use("/settings", settings);
 app.use("/chat", chat);
 
 //upload route
-//Add new games
+//Add new game
 app.use("/upload", upload);
+server.listen(port);
+
+//delete route
+//Delete a game
+app.use("/deleteGame", deleteGame);
 server.listen(port);
 
 

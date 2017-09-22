@@ -27,15 +27,17 @@
 
     <% for(var i=0; i<allGames.length; i++) {%>
         <p>
-          <!-- <a href="/" onclick="javascript:event.target.port=3001"> -->
           <a href="/welcome/new/<%-allGames[i].id-%>">
             <%= allGames[i].name %>
           </a>
-        </p>
+          <span id='deleteInit-<%-allGames[i].id-%>' onclick="deleteInit('<%-allGames[i].id-%>', '<%= allGames[i].name %>')">x</span>
+	</p>
+	<div id='deleteArea-<%-allGames[i].id-%>'></div>
     <% } %>
   </body>
+  <script type="text/javascript" src="/static/js/delete_game.js" charset="utf-8"></script>
   <script type="text/javascript">
-    // On accede à l'objet cyborg en cours grace à : window.parent.cyborg
+      // On accede à l'objet cyborg en cours grace à : window.parent.cyborg
     // var cyborg = window.parent.cyborg;
 
   </script>
