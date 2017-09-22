@@ -81,7 +81,11 @@ var reqApp;
 router.all('*',function (req,res,next) {
 	let io = req.app.get('sio');
 	reqApp = req.app;
-	io.on('connection', function (socket, pseudo) {
+	let players = req.app.get('players');
+	let suid = req.session.suid;
+
+	let socket = players[suid].socket;
+	// io.on('connection', function (socket, pseudo) {
 		socket.dowload = null;
 		socket.initStart = false;
 
@@ -212,8 +216,8 @@ router.all('*',function (req,res,next) {
 			}
 		});
 
-
-	});
+	players[suid].socket = socket;
+	// });
 	res.render('upload_dir.ejs');
 });
 

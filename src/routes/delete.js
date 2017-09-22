@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const fs = require('fs');
-const getSize = require('get-folder-size');
 const child_process = require('child_process');
 const CYBORG_MODULES_PATH = 'cyborg_modules/';
 const CONFIG_FILE = 'cyborg-config.json';

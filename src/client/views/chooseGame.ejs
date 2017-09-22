@@ -34,8 +34,11 @@
 	</p>
 	<div id='deleteArea-<%-allGames[i].id-%>'></div>
     <% } %>
+	<a href="/upload">Add new game or update<a/>
   </body>
-  <script type="text/javascript" src="/static/js/delete_game.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/static/js/delete_game.js" charset="utf-8">
+	//On accede deleInit(stringIdGame, stringNameGame)
+  </script>
   <script type="text/javascript">
       // On accede à l'objet cyborg en cours grace à : window.parent.cyborg
     // var cyborg = window.parent.cyborg;

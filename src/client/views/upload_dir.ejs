@@ -6,6 +6,7 @@
 	</head>
 
 	<body>
+		<a href="/welcome/games">Back<a/>
 		<div id='InfosUpload'>
 			<span>
 				<p>A file, load.json must be a the top level folder.</p>
@@ -52,8 +53,9 @@ server.listen(PORT, function () {
 	<script>
 
 		window.addEventListener("load", Ready);
-
-		const socket = io();
+		var cyborg = window.parent.cyborg;
+		const socket = cyborg.socket;
+		// const socket = io();
 
 		var SelectedFile = null;
 		var SelectedFiles = null;
