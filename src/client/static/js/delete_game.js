@@ -1,5 +1,4 @@
 function deleteInit(idGame, nameGame){
-	console.log('idGame:',idGame);
 	let content = '<div><span>Delete '+nameGame+' ? </span></br>';
 	content += "<span onclick=cancel(\'" + idGame + "\')>Cancel</span> ";
 	content += "<a href='/deleteGame/delete/"+idGame+"' >Hans ! </a> </div>";
