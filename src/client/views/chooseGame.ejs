@@ -26,19 +26,20 @@
     <h1>Choisis un jeu:</h1>
 
     <% for(var i=0; i<allGames.length; i++) {%>
-        <p>
+        <p id='deleteInit-<%-allGames[i].id-%>'>
           <a href="/welcome/new/<%-allGames[i].id-%>">
             <%= allGames[i].name %>
           </a>
-          <span id='deleteInit-<%-allGames[i].id-%>' onclick="deleteInit('<%-allGames[i].id-%>', '<%= allGames[i].name %>')">x</span>
+          <span  onclick="deleteInit('<%-allGames[i].id-%>', '<%= allGames[i].name %>')">x</span>
 	</p>
 	<div id='deleteArea-<%-allGames[i].id-%>'></div>
     <% } %>
-	<a href="/upload">Add new game or update<a/>
+
   </body>
   <script type="text/javascript" src="/static/js/delete_game.js" charset="utf-8">
 	//On accede deleInit(stringIdGame, stringNameGame)
   </script>
+
   <script type="text/javascript">
       // On accede à l'objet cyborg en cours grace à : window.parent.cyborg
     // var cyborg = window.parent.cyborg;

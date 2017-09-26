@@ -38,9 +38,13 @@
             <img class=".pure-img" src="static/img/expand.svg" alt="number of player" />
           </div>
           <div class="pure-u-1-8"></div>
-          <div class="pure-u-3-8"></div>
-          <div class="pure-u-1-8"></div>
-          <div class="pure-u-1-8"><img class=".pure-img" src="static/img/cyborg-face.svg" alt="number of player" /></div>
+          <!-- <div class="pure-u-3-8"></div> -->
+		  <div class="pure-u-1-8"></div>
+		  <div class="pure-u-1-8"></div>
+
+          <div id='add-folder' class="pure-u-1-8"><img class=".pure-img  action-logo background-white" src="static/img/folder-icon.png" alt="number of player" /></div>
+          <div id='chat' class="pure-u-1-8"><img class=".pure-img action-logo" src="static/img/white-chat.png" alt="number of player" /></div>
+          <div id='logo-cyborg' class="pure-u-1-8"><img class=".pure-img" src="static/img/cyborg-face.svg" alt="number of player" /></div>
           <div id="numberOfPlayerZone" class="pure-u-1-8"><p  id="numberOfPlayer">
 
           </p></div>
@@ -62,6 +66,8 @@
 
     <div id="main" class="pure-g">
         <div class="pure-u-1-1 main">
+			<iframe src="" id="chatFrame" class="none" sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation" >
+			</iframe>
             <iframe src="welcome/home" id="mainFrame" class="main" sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation" >
               <p>Sorry, your browser does not support iframes. You can't use Cyborg for the moment :s Pieg.</p>
             </iframe>
@@ -131,6 +137,33 @@
   jQuery('footer').click(function () {
     cyborg.reduceScreen();
   });
+
+  jQuery('#logo-cyborg').click(function () {
+    document.getElementById('mainFrame').src = "/welcome/games";
+  });
+  let isAddFolderOpen = false;
+  jQuery('#add-folder').click(function () {
+	if (isAddFolderOpen) {
+		document.getElementById('mainFrame').src = "/welcome/games";
+	}
+	else {
+		document.getElementById('mainFrame').src = "/upload";
+	}
+	isAddFolderOpen = !isAddFolderOpen;
+  });
+
+  jQuery('#chat').click(function () {
+	let chat_src = document.getElementById('chatFrame');
+	if (chat_src.src.split('/')[3] == "chat") {
+		chat_src.src = '';
+		chat_src.className = 'none';
+	}
+	else {
+		chat_src.src = '/chat';
+		chat_src.className = 'block';
+	}
+  });
+
 
 
   /**

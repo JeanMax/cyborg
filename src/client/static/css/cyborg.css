@@ -11,7 +11,9 @@ body{
   font-weight: bold;
 }
 
-
+.block {
+	display: block;
+}
 
 #header {
     height: 7%;
@@ -25,6 +27,16 @@ body{
 .main {
   height: 100%;
 }
+.none {
+	display: none;
+}
+.action-logo {
+	height: 8%;
+}
+.background-white {
+	background: white;
+}
+
 iframe{
   border: none;
   width: 100%;

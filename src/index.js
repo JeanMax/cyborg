@@ -3,7 +3,6 @@ const app = express();
 const server = require('http').Server(app);
 const sio = require('socket.io')(server);
 const session = require("express-session");
-
 const welcome = require('./routes/welcome');
 const game = require('./routes/games');
 const settings = require('./routes/settings');
@@ -101,7 +100,6 @@ server.listen(port);
 
 
 sio.on('connection', function (socketClient) {
-  // console.log(socketClient.request.session)
   var players = app.get('players');
   var mySuid = socketClient.request.session.suid;
   if (players[mySuid]) {
@@ -110,8 +108,9 @@ sio.on('connection', function (socketClient) {
   else {
   	return ;
   }
-
   sio.emit("numberOfPlayer", sio.engine.clientsCount);
+
+
 
   socketClient.on('newName', function (nom) {
     socketClient.broadcast.emit('annonce', nom + " est connecté");

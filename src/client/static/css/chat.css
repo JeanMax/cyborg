@@ -1,0 +1,9 @@
+#chat-button-text {
+	position: fixed;
+    bottom: 3px;
+}
+
+
+#container-message {
+	overflow-y: auto;
+}

@@ -85,10 +85,11 @@ router.all('*',function (req,res,next) {
 	let suid = req.session.suid;
 
 	let socket = players[suid].socket;
-	// io.on('connection', function (socket, pseudo) {
 		socket.dowload = null;
 		socket.initStart = false;
 
+	if (!socket.up) {
+		socket.up = true;
 		socket.on('initStart', function () {
 			socket.dowload = null;
 			socket.initStart = true;
@@ -210,14 +211,13 @@ router.all('*',function (req,res,next) {
 			}
 			else
 			{
-				var Place = Files[Name]['Downloaded'] / 524288;
-				var Percent = (Files[Name]['Downloaded'] / Files[Name]['FileSize']) * 100;
+				let Place = Files[Name]['Downloaded'] / 524288;
+				let Percent = (Files[Name]['Downloaded'] / Files[Name]['FileSize']) * 100;
 				socket.emit('MoreData', { 'Place' : Place, 'Percent' :  Percent});
 			}
 		});
+	}
 
-	players[suid].socket = socket;
-	// });
 	res.render('upload_dir.ejs');
 });
 
